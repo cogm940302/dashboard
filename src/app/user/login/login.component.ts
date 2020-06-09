@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
   titulo = 'Ingresa tus datos';
   textUser: string;
   textPwd: string;
-  public newPass = false;
+  newPass = false;
   newPassText: string;
   confirmNewPassText: string;
   error: string;
@@ -24,7 +24,9 @@ export class LoginComponent implements OnInit {
   }
 
   async iniciar() {
+    // this.router.navigate(['/dashboard/']);
     const resultado = await this.cognito.signIn(this.textUser, this.textPwd);
+    this.error = '';
     console.log(resultado);
     if (resultado === '') {
       this.router.navigate(['/dashboard/']);
@@ -32,7 +34,7 @@ export class LoginComponent implements OnInit {
       this.titulo = 'Cambia tu contraseña';
       this.newPass = true;
     } else {
-      this.error = resultado;
+      this.error = 'Usuario o contraseña incorrectos';
     }
   }
 
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
     const resultado = await this.cognito.changePass(this.textUser, this.textPwd, this.newPassText);
     console.log(resultado);
     if (resultado === '') {
-      this.router.navigate(['/private/menu']);
+      this.router.navigate(['/dashboard/']);
     } else {
       this.resetValues('Ocurrio un error, favor de volver a intentar');
     }

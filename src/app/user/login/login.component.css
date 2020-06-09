@@ -194,3 +194,11 @@ a.link:hover, a.link:focus {
 @media (min-width: 768px) {
   .mini-sidebar .sidebar-nav #sidebarnav > li:hover > a {
     background: #1c2128; } }
+
+    .error {
+      color: red;
+    }
+
+    .nueva {
+      color: blue
+    }

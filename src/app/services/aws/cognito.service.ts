@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import Auth from '@aws-amplify/auth';
+import { ConsoleLogger } from '@aws-amplify/core';
+
 // import { CognitoUserPool, CognitoUserAttribute, CognitoUser } from 'amazon-cognito-identity-js';
 // import * as AWS from 'aws-sdk/global';
 
@@ -13,14 +15,18 @@ export class CognitoService {
 
   constructor() { }
 
-  poolData = {
-    UserPoolId: 'us-east-1_zlIK9rXul', // Your user pool id here
-    ClientId: '1gagno0fctvkt483tidg6diktp', // Your client id here
-  };
+  // poolData = {
+  //   UserPoolId: 'us-east-1_zlIK9rXul', // Your user pool id here
+  //   ClientId: '1gagno0fctvkt483tidg6diktp', // Your client id here
+  // };
 
 
   async signIn(username: string, password: string) {
+    console.log(username);
+    console.log(password);
     let resultSignIn = '';
+    console.log('voy hacer el login');
+    console.log(Auth);
     await Auth.signIn(username, password)
       .then(
         (success) => {
@@ -34,7 +40,10 @@ export class CognitoService {
           }
         }
       )
-      .catch(err => resultSignIn = 'ERROR');
+      .catch(err => {
+        console.log('error', err);
+        resultSignIn = 'ERROR';
+      });
     return resultSignIn;
   }
 
@@ -42,27 +51,27 @@ export class CognitoService {
     let resultSignIn = '';
 
     await Auth.signIn(username, oldPassword)
-    .then( async (user) => {
+      .then(async (user) => {
         if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
-            const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'phone_number']
-            await Auth.completeNewPassword(
-                user,               // the Cognito User Object
-                newPassword,       // the new password
-                // OPTIONAL, the required attributes
-                {
-                  email: user.challengeParam.userAttributes.email
-                }
-            ).then(user => {
-                // at this time the user is logged in if no MFA required
-                console.log(user);
-            }).catch(e => {
-              console.log(e);
-              resultSignIn = 'ERROR';
-            });
+          const { requiredAttributes } = user.challengeParam; // the array of required attributes, e.g ['email', 'phone_number']
+          await Auth.completeNewPassword(
+            user,               // the Cognito User Object
+            newPassword,       // the new password
+            // OPTIONAL, the required attributes
+            {
+              email: user.challengeParam.userAttributes.email
+            }
+          ).then((userN: any) => {
+            // at this time the user is logged in if no MFA required
+            console.log(userN);
+          }).catch(e => {
+            console.log(e);
+            resultSignIn = 'ERROR';
+          });
         }
-    }).catch(e => {
+      }).catch(e => {
         console.log(e);
-    });
+      });
     return resultSignIn;
   }
 
