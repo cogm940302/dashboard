@@ -34,7 +34,7 @@ export class CognitoService {
           if (success.challengeName === 'NEW_PASSWORD_REQUIRED') {
             resultSignIn = 'NEW';
           } else {
-            if (!success.challengeParam.userAttributes.email_verified) {
+            if (!success.attributes.email_verified) {
               resultSignIn = 'NOT';
             }
           }

@@ -1,186 +1,71 @@
-<div class="main-content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-4">
-                <lbd-chart
-                  [title]="'Email Statistics'"
-                  [subtitle]="'Last Campaign Performance'"
-                  [chartClass]="'ct-perfect-fourth'"
-                  [chartType]="emailChartType"
-                  [chartData]="emailChartData"
-                  [legendItems]="emailChartLegendItems"
-                  [withHr]="true"
-                  [footerIconClass]="'fa fa-clock-o'"
-                  [footerText]="'Campaign sent 2 days ago'">
-                </lbd-chart>
-            </div>
-            <div class="col-md-8">
-                <lbd-chart
-                  [title]="'Users Behavior'"
-                  [subtitle]="'24 Hours performance'"
-                  [chartType]="hoursChartType"
-                  [chartData]="hoursChartData"
-                  [chartOptions]="hoursChartOptions"
-                  [chartResponsive]="hoursChartResponsive"
-                  [legendItems]="hoursChartLegendItems"
-                  [withHr]="true"
-                  [footerIconClass]="'fa fa-history'"
-                  [footerText]="'Updated 3 minutes ago'">
-                </lbd-chart>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <lbd-chart
-                  [title]="'2014 Sales'"
-                  [subtitle]="'All products including Taxes'"
-                  [chartType]="activityChartType"
-                  [chartData]="activityChartData"
-                  [chartOptions]="activityChartOptions"
-                  [chartResponsive]="activityChartResponsive"
-                  [legendItems]="activityChartLegendItems"
-                  [withHr]="true"
-                  [footerIconClass]="'fa fa-check'"
-                  [footerText]="'Data information certified'">
-                </lbd-chart>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="header">
-                        <h4 class="title">Tasks</h4>
-                        <p class="category">Backend development</p>
+<div class="errorGenerico">{{errorGenerico}}</div>
+<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <button class="btn btn-outline-success mr-3" (click)="createClient()" value="Nuevo">Nuevo</button>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-outline-success mr-3" value="salir" (click)="logout()">Salir</button>
+            </li>
+            <li class="nav-item" *ngIf="false">
+                <div class="form-group">
+                    <select class="browser-default custom-select" #mySelect (change)='useLanguage(mySelect.value)' name="selectLenguaje" class="form-control" id="selectLenguaje">
+                <option  *ngFor="let leng of this.lenguajeOP.lenguajes;"  [selected]="leng.value==this.lenguajeOP.indexLen" value="{{leng.value}}"  >{{leng.descripcion}}</option>
+                </select>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav> -->
+
+<form class="form-inline my-2 my-lg-0">
+        <mat-form-field>
+            <input type="text" matInput id="buscarInput" class="mr-sm-2" (keyup)="applyFilter($event.target.value)" placeholder="Buscar" autocomplete="off">
+        </mat-form-field>
+</form>
+
+<table mat-table  [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8">
+    <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
+        <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+        <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+    </ng-container>
+    <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+            <div class="row align-items-center">
+                <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                    <div class="example-element-diagram">
+                        <!-- <span class="edit" [routerLink]="['/private/edit/',element._id]"> -->
+                        <span class="edit" (click)="editClient(element._id,element.ApiToken,element.pass)">
+                          <button type="button" class="btn btn-success btn-sm">Editar</button>
+                        </span>
                     </div>
-                    <div class="content">
-                        <div class="table-full-width">
-                            <table class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox">
-                                                <input id="checkbox1" type="checkbox">
-                                                <label for="checkbox1">
-
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>Sign contract for "What are conference organizers afraid of?"</td>
-                                        <td class="td-actions text-right">
-                                            <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox">
-                                                <input id="checkbox2" type="checkbox" checked>
-                                                <label for="checkbox2">
-
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
-                                        <td class="td-actions text-right">
-                                            <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox">
-                                                <input id="checkbox3" type="checkbox" checked>
-                                                <label for="checkbox3">
-
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit
-                                        </td>
-                                        <td class="td-actions text-right">
-                                            <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox">
-                                                <input id="checkbox4" type="checkbox">
-                                                <label for="checkbox4">
-
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>Create 4 Invisible User Experiences you Never Knew About</td>
-                                        <td class="td-actions text-right">
-                                            <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox">
-                                                <input id="checkbox5" type="checkbox" >
-                                                <label for="checkbox5">
-
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>Read "Following makes Medium better"</td>
-                                        <td class="td-actions text-right">
-                                            <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox">
-                                                <input id="checkbox6" type="checkbox">
-                                                <label for="checkbox6">
-
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>Unfollow 5 enemies from twitter</td>
-                                        <td class="td-actions text-right">
-                                            <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-xs">
-                                                <i class="fa fa-edit"></i>
-                                            </button>
-                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="footer">
-                            <hr>
-                            <div class="stats">
-                                <i class="fa fa-history"></i> Updated 3 minutes ago
-                            </div>
-                        </div>
+                    <div class="col-12 example-element-description">
+                        <div class="col "><span class="bold">Telefono</span> {{element.telefono}}</div>
+                        <div class="col "><span class="bold">Secret Token</span> {{element.pass}}</div>
+                        <div class="col "><span class="bold">Listas Blancas Post</span> {{element.listasBlancasPost}}</div>
+                        <div class="col "><span class="bold">Listas Blancas Get</span> {{element.listasBlancas}}</div>
+                        <div class="col "><span class="bold">Referencia Daon</span> {{element.hrefDaon}}</div>
+                        <!-- <div class="col "><span class="bold">Estatus</span> {{ element.statusCliente == 1 ? 'Activo' : 'Inactivo' }}</div> -->
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="example-element-row" [class.example-expanded-row]="expandedElement === element" (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+</table>
+<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+<tr mat-row *matRowDef="let row; columns: displayedColumns;">
+
+</tr>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>

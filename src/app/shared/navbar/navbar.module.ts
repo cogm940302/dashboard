@@ -2,9 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from './navbar.component';
+import { MatTableModule } from '@angular/material/table';
+
+
 
 @NgModule({
-    imports: [ RouterModule, CommonModule ],
+    imports: [ RouterModule, CommonModule, MatTableModule ],
     declarations: [ NavbarComponent ],
     exports: [ NavbarComponent ]
 })

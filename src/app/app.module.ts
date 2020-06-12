@@ -1,9 +1,14 @@
+import { AdministradorModule } from './administrador/administrador.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { AmplifyAngularModule, AmplifyService } from 'aws-amplify-angular';
+import { MatFormFieldModule } from '@angular/material';
+import { MatTableModule } from '@angular/material';
+
 
 import { AppRoutingModule } from './app.routing';
 import { NavbarModule } from './shared/navbar/navbar.module';
@@ -25,7 +30,12 @@ import { LoginComponent } from './user/login/login.component';
     FooterModule,
     SidebarModule,
     AppRoutingModule,
-    AmplifyAngularModule
+    AmplifyAngularModule,
+    BrowserModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatTableModule,
+    AdministradorModule
   ],
   declarations: [
     AppComponent,
