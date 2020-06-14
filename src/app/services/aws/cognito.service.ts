@@ -20,6 +20,13 @@ export class CognitoService {
   //   ClientId: '1gagno0fctvkt483tidg6diktp', // Your client id here
   // };
 
+  async signOut() {
+    try {
+      await Auth.signOut();
+    } catch (error) {
+      console.log('error signing out: ', error);
+    }
+  }
 
   async signIn(username: string, password: string) {
     console.log(username);

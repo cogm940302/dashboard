@@ -42,9 +42,9 @@ export class CreateClienteComponent implements OnInit {
 
   //  myForm = MyFormClient;
   // Formulario de Clientes en el HTML
-  myForm = new FormGroup({
-    nombre: new FormControl('', [this.isDupicate(), Validators.required]),
-    correo: new FormControl('', [this.isDupicate(), Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
+  public myForm = new FormGroup({
+    nombre: new FormControl('', [ Validators.required]),
+    correo: new FormControl('', [ Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')]),
     password: new FormControl(''),
     token: new FormControl(''),
     telefono: new FormControl('', [Validators.pattern('(([0-9]{10} ext [0-9]{1,4})|([0-9]{10}))')]),
@@ -52,7 +52,7 @@ export class CreateClienteComponent implements OnInit {
     lis: new FormControl(''),
     hrefDaon: new FormControl(''),
     nombreOferta: new FormControl(''),
-    nombreOfertaAdd: new FormControl('', [this.isRequired()]),
+    nombreOfertaAdd: new FormControl(''),
     selectname: new FormControl(''),
     btnagregar: new FormControl(''),
   });
@@ -65,141 +65,142 @@ export class CreateClienteComponent implements OnInit {
     private ofertaService: OfertaService)  { }
 
   ngOnInit(): void {
-    // this.ofertas = new Ofertas();
-    // this.ofertas._id = undefined;
-    // this.oferta = new Oferta();
-    // this.servicio = new Servicio();
-    // this.ofertas.ofertas = [];
-    // this.cliente = new Clientes();
+    this.ofertas = new Ofertas();
+    this.ofertas._id = undefined;
+    this.oferta = new Oferta();
+    this.servicio = new Servicio();
+    this.ofertas.ofertas = [];
+    this.cliente = new Clientes();
 
-    // // se recibe id cuando se va a actualizar el cliente
-    // this.actRoute.params.subscribe(params => {
-    //   this.id = params['id'];
-    // });
-    // this.initOtherProperties();
-    // if (this.id !== undefined && this.id !== '') {
-    //   this.agregar = false;
-    //   this.botonValue = 'Actualizar';
-    //   const tokenOauth = sessionStorage.getItem('tokenEdit');
-    //   this.myForm.controls['nombre'].disable();
-    //   // sessionStorage.removeItem('tokenEdit');
-    //   const objectResponse = {};
-    //   // const objectResponse = await this.client.getCustomer(this.id, tokenOauth);
-    //   console.log(objectResponse);
-    //   console.log(JSON.stringify(objectResponse));
-    //   if (objectResponse['error']) {
-    //     this.router.navigate(['/dashboard']);
-    //     return;
-    //   }
-    //   Object.assign(this.cliente, objectResponse['response']);
-    //   Object.assign(this.ofertas, objectResponse['responseOferta']);
-    //   this.oferta = this.ofertas.ofertas[(this.ofertas.ofertas.length - 1)];
-    //   this.filtersLoaded = Promise.resolve(true);
+    // se recibe id cuando se va a actualizar el cliente
+    this.actRoute.params.subscribe(params => {
+      this.id = params['id'];
+    });
+    this.initOtherProperties();
+    if (this.id !== undefined && this.id !== '') {
+      this.agregar = false;
+      this.botonValue = 'Actualizar';
+      const tokenOauth = sessionStorage.getItem('tokenEdit');
+      this.myForm.controls['nombre'].disable();
+      // sessionStorage.removeItem('tokenEdit');
+      const objectResponse = {};
+      // const objectResponse = await this.client.getCustomer(this.id, tokenOauth);
+      console.log(objectResponse);
+      console.log(JSON.stringify(objectResponse));
+      if (objectResponse['error']) {
+        this.router.navigate(['/dashboard']);
+        return;
+      }
+      Object.assign(this.cliente, objectResponse['response']);
+      Object.assign(this.ofertas, objectResponse['responseOferta']);
+      this.oferta = this.ofertas.ofertas[(this.ofertas.ofertas.length - 1)];
+      this.filtersLoaded = Promise.resolve(true);
 
-    // } else {
-    //   this.agregar = true;
-    //   this.filtersLoaded = Promise.resolve(true);
-    // }
+    } else {
+      this.agregar = true;
+      this.filtersLoaded = Promise.resolve(true);
+    }
+    this.sendOfer();
   }
 
-  // async sendOfer() {
-  //   this.ofertasN = [];
-  //   this.ofertasN[0] = new Servicio();
-  //   this.ofertasN[0].nombre = 'Daon';
-  //   this.ofertasN[0].props = ['Selfie', 'Documento', 'Prueva de vida'];
-  //   this.ofertasN[1] = new Servicio();
-  //   this.ofertasN[1].nombre = 'Validación Recepción';
-  //   this.ofertasN[1].props = ['Correo Electrónico', 'SMS'];
+  async sendOfer() {
+    this.ofertasN = [];
+    this.ofertasN[0] = new Servicio();
+    this.ofertasN[0].nombre = 'Daon';
+    this.ofertasN[0].props = ['Selfie', 'Documento', 'Prueva de vida'];
+    this.ofertasN[1] = new Servicio();
+    this.ofertasN[1].nombre = 'Validación Recepción';
+    this.ofertasN[1].props = ['Correo Electrónico', 'SMS'];
 
-  //   this.abrir = true;
-  // }
+    this.abrir = true;
+  }
 
-  // async getUserAndPass() {
-  //   // const datos = await (this.userService.onCreateNewUser(this.cliente.nombre));
-  //   // this.cliente.ApiToken = datos['UserPoolClient']['ClientId'];
-  //   // this.cliente.pass = datos['UserPoolClient']['ClientSecret'];
-  //   // if (this.cliente.ApiToken === undefined || this.cliente.pass === undefined) {
-  //   //   return false;
-  //   // }
-  //   // return true;
-  // }
-  // async guardar() {
-  //   this.errorGenerico = '';
+  async getUserAndPass() {
+    // const datos = await (this.userService.onCreateNewUser(this.cliente.nombre));
+    // this.cliente.ApiToken = datos['UserPoolClient']['ClientId'];
+    // this.cliente.pass = datos['UserPoolClient']['ClientSecret'];
+    // if (this.cliente.ApiToken === undefined || this.cliente.pass === undefined) {
+    //   return false;
+    // }
+    // return true;
+  }
+  async guardar() {
+    this.errorGenerico = '';
 
-  //   this.isDup = false;
-  //   this.submitted = true;
-  //   this.cliente._id = this.id;
-  //   this.cliente.nombre = (this.myForm.controls.nombre.value) === '' ? this.cliente.nombre : this.myForm.controls.nombre.value;
-  //   this.cliente.correo = (this.myForm.controls.correo.value) === '' ? this.cliente.correo : this.myForm.controls.correo.value;
-  //   this.myForm.patchValue({ correo: this.cliente.correo });
-  //   this.cliente.telefono = (this.myForm.controls.telefono.value) === '' ? this.cliente.telefono : this.myForm.controls.telefono.value;
-  //   this.cliente.listasBlancasPost = (this.myForm.controls.lisPos.value) === '' ? this.cliente.listasBlancasPost : this.myForm.controls.lisPos.value;
-  //   this.cliente.hrefDaon = (this.myForm.controls.hrefDaon.value) === '' ? this.cliente.hrefDaon : this.myForm.controls.hrefDaon.value;
-  //   this.cliente.listasBlancas = (this.myForm.controls.lis.value) === '' ? this.cliente.listasBlancas : this.myForm.controls.lis.value.split(",");
+    this.isDup = false;
+    this.submitted = true;
+    this.cliente._id = this.id;
+    this.cliente.nombre = (this.myForm.controls.nombre.value) === '' ? this.cliente.nombre : this.myForm.controls.nombre.value;
+    this.cliente.correo = (this.myForm.controls.correo.value) === '' ? this.cliente.correo : this.myForm.controls.correo.value;
+    this.myForm.patchValue({ correo: this.cliente.correo });
+    this.cliente.telefono = (this.myForm.controls.telefono.value) === '' ? this.cliente.telefono : this.myForm.controls.telefono.value;
+    this.cliente.listasBlancasPost = (this.myForm.controls.lisPos.value) === '' ? this.cliente.listasBlancasPost : this.myForm.controls.lisPos.value;
+    this.cliente.hrefDaon = (this.myForm.controls.hrefDaon.value) === '' ? this.cliente.hrefDaon : this.myForm.controls.hrefDaon.value;
+    this.cliente.listasBlancas = (this.myForm.controls.lis.value) === '' ? this.cliente.listasBlancas : this.myForm.controls.lis.value.split(",");
 
-  //   if (this.myForm.invalid) {
-  //     this.f.correo.updateValueAndValidity();
-  //     // await this.spinner.hide();
-  //     return;
-  //   }
-  //   console.log(this.cliente._id);
-  //   if (this.cliente._id === undefined) {
-  //   //   const resultCognito = await this.getUserAndPass();
-  //   //   if (!resultCognito) {
-  //   //     this.errorGenerico = 'Error, favor de volver a intentar';
-  //   //   } else {
-  //   //     this.errorGenerico = await this.client.createCustomer(this.cliente, this.ofertas);
-  //   //   }
-  //   }
-  //   // else {
-  //   //   this.errorGenerico = await this.client.updateCustomer(this.cliente, this.id, this.cliente._id, this.ofertas);
-  //   // }
-  //   if (this.errorGenerico === 'OK') {
-  //     setTimeout(() => {
-  //       this.router.navigate(['/dashboard']);
-  //     }, 1500);
-  //   } else {
-  //     // await this.spinner.hide();
-  //   }
+    if (this.myForm.invalid) {
+      this.f.correo.updateValueAndValidity();
+      // await this.spinner.hide();
+      return;
+    }
+    console.log(this.cliente._id);
+    if (this.cliente._id === undefined) {
+    //   const resultCognito = await this.getUserAndPass();
+    //   if (!resultCognito) {
+    //     this.errorGenerico = 'Error, favor de volver a intentar';
+    //   } else {
+    //     this.errorGenerico = await this.client.createCustomer(this.cliente, this.ofertas);
+    //   }
+    }
+    // else {
+    //   this.errorGenerico = await this.client.updateCustomer(this.cliente, this.id, this.cliente._id, this.ofertas);
+    // }
+    if (this.errorGenerico === 'OK') {
+      setTimeout(() => {
+        this.router.navigate(['/dashboard']);
+      }, 1500);
+    } else {
+      // await this.spinner.hide();
+    }
 
-  // }
+  }
 
 
-  // regresar() {
-  //   this.router.navigate(['/dashboard']);
-  // }
+  regresar() {
+    this.router.navigate(['/dashboard']);
+  }
 
-  // recibeOferta(event) {
-  //   console.log(event);
-  //   this.ofertas = event;
-  // }
+  recibeOferta(event) {
+    console.log(event);
+    this.ofertas = event;
+  }
 
-  // get f() { return this.myForm.controls; }
+  get f() { return this.myForm.controls; }
 
-  // isDupicate(): ValidatorFn {
-  //   return () => {
-  //     if (this.isDup && this.submitted) {
-  //       this.isDup = false;
-  //       return { unique: true };
-  //     } else {
-  //       return null;
-  //     }
-  //   };
-  // }
-  // initOtherProperties() {
-  //   this.recepcionValidacionPropiedades = new Servicio();
-  //   this.recepcionValidacionPropiedades.nombre = 'Validación Recepción';
-  //   this.recepcionValidacionPropiedades.props = ['Correo Electrónico', 'SMS'];
+  isDupicate(): ValidatorFn {
+    return () => {
+      if (this.isDup && this.submitted) {
+        this.isDup = false;
+        return { unique: true };
+      } else {
+        return null;
+      }
+    };
+  }
+  initOtherProperties() {
+    this.recepcionValidacionPropiedades = new Servicio();
+    this.recepcionValidacionPropiedades.nombre = 'Validación Recepción';
+    this.recepcionValidacionPropiedades.props = ['Correo Electrónico', 'SMS'];
 
-  // }
-  // isRequired(): ValidatorFn {
-  //   return () => {
-  //     if (false) {
-  //       return { required: true };
-  //     } else {
-  //       return null;
-  //     }
-  //   };
-  // }
+  }
+  isRequired(): ValidatorFn {
+    return () => {
+      if (false) {
+        return { required: true };
+      } else {
+        return null;
+      }
+    };
+  }
 
 }
