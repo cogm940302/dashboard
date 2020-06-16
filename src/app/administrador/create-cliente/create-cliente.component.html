@@ -54,7 +54,7 @@
                     <div class="card-header">
                         <h5>Seleccione las ofertas para el cliente</h5>
                     </div>
-                    <app-ofertas *ngIf="abrir" (todasLasOfertasAgregadasReturn)='recibeOferta($event)' [servicios]="ofertasN" [todasLasOfertasAgregadas]="ofertas"></app-ofertas>
+                    <app-ofertas-nombre *ngIf="abrir" (todasLasOfertasAgregadasReturn)='recibeOferta($event)' [servicios]="ofertasN" [todasLasOfertasAgregadas]="ofertas"></app-ofertas-nombre>
                 </div>
 
                 <button type="submit" (click)="guardar()" class="btn btn-primary mr-4 mt-3">{{botonValue}}</button>

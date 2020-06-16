@@ -18,15 +18,15 @@ export class Clientes {
     ofertascliente: OfertasCliente;
   }
 
-  // export class Oferta {
-  //   nombre: string;
-  //   servicios: any[];
-  // }
-
   export class Oferta {
     nombre: string;
-    servicios: Servicio[];
+   servicios: Servicio[];
   }
+
+  // export class OfertaRefactor {
+  //   nombre: string;
+  //   servicios: Servicio[];
+  // }
 
   export class Servicio {
     nombre: string;

@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { MiddleMongoService } from './../../services/http/middle-mongo.service';
-import { Ofertas, Servicio, Clientes, Oferta } from 'app/model/Clientes';
+import { Ofertas, Clientes, Oferta } from 'app/model/Clientes';
 import { OfertaService } from 'app/services/http/oferta.service';
 
 
@@ -17,8 +17,8 @@ export class CreateClienteComponent implements OnInit {
 
   // para las ofertas
   ofertasExistentes: Ofertas;
-  servciosDeOfertasExistentes: Servicio[];
-  ofertasN: Servicio[];
+  // servciosDeOfertasExistentes: Servicio[];
+  ofertasN: any[];
   abrir = false;
 
   // Clases
@@ -26,7 +26,7 @@ export class CreateClienteComponent implements OnInit {
   ofertas: Ofertas;
   oferta: Oferta;
   ofertaAdd: Oferta;
-  servicio: Servicio;
+  // servicio: Servicio;
   ofertasArray: Oferta[];
 
   // Varibles
@@ -76,7 +76,7 @@ export class CreateClienteComponent implements OnInit {
     this.ofertas = new Ofertas();
     this.ofertas._id = undefined;
     this.oferta = new Oferta();
-    this.servicio = new Servicio();
+    // this.servicio = new Servicio();
     this.ofertas.ofertas = [];
     this.cliente = new Clientes();
 
@@ -127,12 +127,62 @@ export class CreateClienteComponent implements OnInit {
 
   async sendOfer() {
     this.ofertasN = [];
-    this.ofertasN[0] = new Servicio();
-    this.ofertasN[0].nombre = 'Daon';
-    this.ofertasN[0].props = ['Selfie', 'Documento', 'Prueva de vida'];
-    this.ofertasN[1] = new Servicio();
-    this.ofertasN[1].nombre = 'Validación Recepción';
-    this.ofertasN[1].props = ['Correo Electrónico', 'SMS'];
+    const selfie = {
+      nombre: 'selfie',
+      id: '1234567890',
+      tipo: 'Biometricos',
+      status: true
+    };
+    const documento = {
+      nombre: 'documento',
+      id: '1234567890',
+      tipo: 'Biometricos',
+      status: true
+    };
+    const prueba = {
+      nombre: 'Prueba de Vida',
+      id: '1234567890',
+      tipo: 'Biometricos',
+      status: true
+    };
+    const correo = {
+      nombre: 'Correo Electrónico',
+      id: '1234567890',
+      tipo: 'Validacion Recepción',
+      status: true
+    };
+    const sms = {
+      nombre: 'SMS',
+      id: '1234567890',
+      tipo: 'Validacion Recepción',
+      status: true
+    };
+    const rfc = {
+      nombre: 'RFC',
+      id: '1234567890',
+      tipo: 'Validacion Información',
+      status: true
+    };
+    const clabe = {
+      nombre: 'Cuenta Clabe',
+      id: '1234567890',
+      tipo: 'Validacion Información',
+      status: true
+    };
+    this.ofertasN.push(selfie);
+    this.ofertasN.push(documento);
+    this.ofertasN.push(prueba);
+    this.ofertasN.push(correo);
+    this.ofertasN.push(sms);
+    this.ofertasN.push(rfc);
+    this.ofertasN.push(clabe);
+
+    // this.ofertasN[0] = new Servicio();
+    // this.ofertasN[0].nombre = 'Daon';
+    // this.ofertasN[0].props = ['Selfie', 'Documento', 'Prueva de vida'];
+    // this.ofertasN[1] = new Servicio();
+    // this.ofertasN[1].nombre = 'Validación Recepción';
+    // this.ofertasN[1].props = ['Correo Electrónico', 'SMS'];
 
     this.abrir = true;
   }
@@ -164,6 +214,7 @@ export class CreateClienteComponent implements OnInit {
 
     if (this.myForm.invalid) {
       this.f.correo.updateValueAndValidity();
+      console.log('no es un correo valido');
       // await this.spinner.hide();
       return;
     }

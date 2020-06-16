@@ -1,0 +1,67 @@
+<!-- <p>{{addCheckboxes()}}</p> -->
+<div class="card border-0 card-body align-items-center d-flex justify-content-center" style="width: 80rem;">
+    <div class="row">
+
+      <form class="" [formGroup]="form" (ngSubmit)="submit()" ngNativeValidate>
+        <div class="row">
+          <div class="col">
+            <input type="text" placeholder="Nombre de la oferta" required #nombreOferta>
+          </div>
+        </div>
+        <!-- our form array of checkboxes will go here -->
+
+        <div class="row mt-3">
+          <label formArrayName="orders" class="row"
+            *ngFor="let order of form.controls.orders['controls']; let i = index">
+
+            <div class="row">
+              <label class="col" style="font-weight: bold;">{{serviciosConvertidos[i].nombre}}
+                  <br>
+                  <br/>
+                  <br>
+              </label>
+            </div>
+
+            <!-- <input type="checkbox" name="{{serviciosConvertidos[i].nombre}}" (change)="toogleCheckbox($event)" [formControlName]="i" />
+        {{serviciosConvertidos[i].nombre}} -->
+
+            <div>
+              <label *ngFor="let propiedad of serviciosConvertidos[i].props; let j = index ">
+                <input [checked]="serviciosConvertidos[i].nombre === 'Daon'" [disabled]="serviciosConvertidos[i].nombre === 'Daon'"
+                  #checkboxes type="checkbox" (change)="toogleCheckbox($event)"
+                  name="{{serviciosConvertidos[i].nombre + '-' + serviciosConvertidos[i].props[j].nombre + '-' + serviciosConvertidos[i].props[j].id}}" />{{serviciosConvertidos[i].props[j].nombre}}
+                  <br>
+                  <br/>
+                  <br>
+                </label>
+            </div>
+           
+          </label>
+          <br>
+          <br/>
+          <br>
+        </div>
+
+        <button class="btn btn-primary">Guardar Oferta</button>
+      </form>
+
+      <div class="ml-5 card">
+        <div class="card-body">
+          <h5 class="card-title">Ofertas agregadas</h5>
+          <div class="card">
+            <div class="card-body">
+              <div class="dropdown">
+                <select class="browser-default custom-select" #mySelect (change)='onOptionsSelected(mySelect.value)'
+                  name="nombre" class="form-control" id="selectname">
+                  <option value="value1">Elegir</option>
+                  <option *ngFor="let oferta of this.todasLasOfertasAgregadas.ofertas; index as i" value="{{i}}">
+                    {{oferta.nombre}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>

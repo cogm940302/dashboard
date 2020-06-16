@@ -8,12 +8,13 @@ import { CreateClienteComponent } from './create-cliente/create-cliente.componen
 import { AdministradorRoutes } from './administrador.routing';
 import { from } from 'rxjs';
 import { OfertasComponent } from './ofertas/ofertas.component';
+import { OfertasNombreComponent } from './ofertas-nombre/ofertas-nombre.component';
 
 
 
 
 @NgModule({
-  declarations: [CreateClienteComponent, OfertasComponent],
+  declarations: [CreateClienteComponent, OfertasComponent, OfertasNombreComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(AdministradorRoutes),
