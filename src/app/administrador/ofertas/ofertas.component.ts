@@ -27,7 +27,7 @@ export class OfertasComponent implements OnInit {
     this.form = this.formBuilder.group({
       orders: new FormArray([])
     });
-    console.log(this.todasLasOfertasAgregadas);
+    // console.log(this.todasLasOfertasAgregadas);
     if (!this.todasLasOfertasAgregadas || this.isEmpty(this.todasLasOfertasAgregadas)) {
       this.todasLasOfertasAgregadas = new Ofertas();
       this.todasLasOfertasAgregadas.ofertas = [];

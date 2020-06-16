@@ -1,10 +1,13 @@
-import { MiddleMongoService } from './../services/http/middle-mongo.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
-import { LegendItem, ChartType } from '../lbd/lbd-chart/lbd-chart.component';
-import * as Chartist from 'chartist';
+// import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
+// import { LegendItem, ChartType } from '../lbd/lbd-chart/lbd-chart.component';
+// import * as Chartist from 'chartist';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { Router } from '@angular/router';
+
+import { CognitoService } from 'app/services/aws/cognito.service';
+import { MiddleMongoService } from './../services/http/middle-mongo.service';
 import { Clientes } from 'app/model/Clientes';
 import { isEmpty } from 'app/model/UtilValidator';
 
@@ -29,7 +32,7 @@ export class HomeComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  constructor(private middleMongo: MiddleMongoService) {
+  constructor(private middleMongo: MiddleMongoService, private cognito: CognitoService, public router: Router) {
 }
 
 createClient() {
@@ -52,10 +55,16 @@ async ngOnInit() {
   await this.readWSClient();
 }
 
+async creaClienteVirtual() {
+  this.cognito.creaClient('');
+}
+
 async readWSClient() {
+  // this.cognito.getCredentialsExample();
+  // await this.cognito.creaLasCredenciales();
   console.log('si voy por los clientes');
   this.clientes = await this.middleMongo.getCustomers();
-  console.log(this.clientes);
+  // console.log(this.clientes);
   if (this.clientes && !isEmpty(this.clientes) ) {
     this.dataSource = new MatTableDataSource<Clientes>(this.clientes);
     this.dataSource.paginator = this.paginator;
@@ -69,6 +78,8 @@ applyFilter(filterValue: string) {
 async editClient(id: string, user: string, pwd: string) {
   console.log('voy a guardar los datos ' + id + ' ' + user + ' ' + pwd);
   // sessionStorage.setItem('tokenEdit', await this.tokenService.generaToken(user, pwd));
+  this.router.navigate(['/dashboard/edit' + `/${id}`]);
+
 }
 
 }

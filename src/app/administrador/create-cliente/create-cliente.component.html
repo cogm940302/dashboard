@@ -5,25 +5,17 @@
                 <div class="errorGenerico">{{errorGenerico}}</div>
                 <div class="form-group">
                     <label for="nombreInput" class="col-4">Nombre</label>
-                    <input type="text" value="{{cliente.nombre}}" name="nombre" class="form-control col-7"
-                        id="nombreInput" placeholder="Nombre" formControlName="nombre"
-                        [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }" ng-disabled="inputNameDisabled">
+                    <input type="text" value="{{cliente.nombre}}" name="nombre" class="form-control col-7" id="nombreInput" formControlName="nombre" placeholder="Nombre"  [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }" ng-disabled="inputNameDisabled">
                     <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
-                        <div *ngIf="f.nombre.errors.unique">Este nombre del cliente ya se encuentra registrado en la
-                            base de
-                            datos</div>
+                        <div *ngIf="f.nombre.errors.unique">Este nombre del cliente ya se encuentra registrado en la base de datos</div>
                         <div *ngIf="f.nombre.errors.required">Nombre requerido</div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="emailInput">Correo Electronico</label>
-                    <input type="email" value="{{cliente.correo}}" name="correo" class="form-control" id="emailInput"
-                        aria-describedby="emailHelp" placeholder="Email" formControlName="correo"
-                        [ngClass]="{ 'is-invalid': submitted && f.correo.errors }">
+                    <input type="email" value="{{cliente.correo}}" name="correo" class="form-control" id="emailInput" formControlName="correo" aria-describedby="emailHelp" placeholder="Email" [ngClass]="{ 'is-invalid': submitted && f.correo.errors }">
                     <div *ngIf="submitted && f.correo.errors" class="invalid-feedback">
-                        <div *ngIf="f.correo.errors.unique">Este correo del cliente ya se encuentra registrado en la
-                            base de
-                            datos</div>
+                        <div *ngIf="f.correo.errors.unique">Este correo del cliente ya se encuentra registrado en la base de datos</div>
                         <div *ngIf="f.correo.errors.required">Correo requerido</div>
                         <div *ngIf="f.correo.errors.pattern">Correo invalido</div>
                     </div>
@@ -31,7 +23,7 @@
                 <div class="form-group">
                     <label for="telefonoInput">Telefono</label>
                     <input placeholder="8888888888 ext 8888" type="tel" value="{{cliente.telefono}}" name="telefono"
-                        class="form-control" id="telefonoInput" formControlName="telefono"
+                        class="form-control" id="telefonoInput" formControlName="telefono" 
                         [ngClass]="{ 'is-invalid': submitted && f.telefono.errors }">
                     <div *ngIf="submitted && f.telefono.errors" class="invalid-feedback">
                         <div *ngIf="f.telefono.errors.required">Tel requerido</div>
@@ -54,8 +46,7 @@
                 </div>
                 <div class="form-group">
                     <label for="listIput">Listas Blancas Get</label>
-                    <input type="text" value="{{cliente.listasBlancas}}" name="lis" class="form-control" id="listIput"
-                        formControlName="lis">
+                    <input type="text" value="{{cliente.listasBlancas}}" name="lis" class="form-control" id="listIput" formControlName="lis">
                 </div>
             </mat-tab>
             <mat-tab label="Ofertas">
