@@ -15,7 +15,7 @@
             *ngFor="let order of form.controls.orders['controls']; let i = index">
 
             <div class="row">
-              <label class="col" style="font-weight: bold;">{{serviciosConvertidos[i].nombre}}
+              <label class="col" style="font-weight: bold;">{{serviciosConvertidos[i]['nombre']}}
                   <br>
                   <br/>
                   <br>
@@ -26,10 +26,10 @@
         {{serviciosConvertidos[i].nombre}} -->
 
             <div>
-              <label *ngFor="let propiedad of serviciosConvertidos[i].props; let j = index ">
-                <input [checked]="serviciosConvertidos[i].nombre === 'Daon'" [disabled]="serviciosConvertidos[i].nombre === 'Daon'"
+              <label *ngFor="let propiedad of serviciosConvertidos[i]['props']; let j = index ">
+                <input [checked]="serviciosConvertidos[i]['nombre'] === 'Daon'" [disabled]="serviciosConvertidos[i]['nombre'] === 'Daon'"
                   #checkboxes type="checkbox" (change)="toogleCheckbox($event)"
-                  name="{{serviciosConvertidos[i].nombre + '-' + serviciosConvertidos[i].props[j].nombre + '-' + serviciosConvertidos[i].props[j].id}}" />{{serviciosConvertidos[i].props[j].nombre}}
+                  name="{{serviciosConvertidos[i]['nombre'] + '-' + serviciosConvertidos[i]['props'][j].nombre}}" />{{serviciosConvertidos[i].props[j].nombre}}
                   <br>
                   <br/>
                   <br>

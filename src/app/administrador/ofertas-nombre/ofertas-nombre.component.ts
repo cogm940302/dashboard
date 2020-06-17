@@ -22,13 +22,13 @@ export class OfertasNombreComponent implements OnInit {
   servicioTemp: Servicio[] = [];
   form: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       orders: new FormArray([])
     });
-    console.log(this.servicios);
+    // console.log(this.servicios);
     // console.log(this.todasLasOfertasAgregadas);
     if (!this.todasLasOfertasAgregadas || this.isEmpty(this.todasLasOfertasAgregadas)) {
       this.todasLasOfertasAgregadas = new Ofertas();
@@ -36,56 +36,72 @@ export class OfertasNombreComponent implements OnInit {
     } else {
       // this.onOptionsSelected('0');
     }
-    this.convertOffer();
+    this.serviciosConvertidos = this.convertOffer(this.servicios);
     this.addCheckboxes();
     // this.onOptionsSelected('0');
   }
 
-  convertOffer() {
-    this.serviciosConvertidos = [];
+  convertOffer(serviciosAConvertir: any[]) {
+    const serviciosCon = [];
     const map = new Map();
-    for (let i = 0 ; i < this.servicios.length; i++) {
-      if (map.has(this.servicios[i].tipo)) {
-        const arreglo = map.get(this.servicios[i].tipo);
-        arreglo.push({nombre: this.servicios[i].nombre, id: this.servicios[i].id});
-        map.set(this.servicios[i].tipo, arreglo);
+    //    for (let i = 0; i < this.servicios.length; i++) {
+    for (const item in serviciosAConvertir) {
+      if (map.has(serviciosAConvertir[`${item}`].tipo)) {
+        const arreglo = map.get(serviciosAConvertir[`${item}`].tipo);
+        arreglo.push({ nombre: serviciosAConvertir[`${item}`].nombre, id: serviciosAConvertir[`${item}`].id });
+        map.set(serviciosAConvertir[`${item}`].tipo, arreglo);
       } else {
-        const arreglo = [{nombre: this.servicios[i].nombre, id: this.servicios[i].id}];
-        map.set(this.servicios[i].tipo, arreglo);
+        const arreglo = [{ nombre: serviciosAConvertir[`${item}`].nombre, id: serviciosAConvertir[`${item}`].id }];
+        map.set(serviciosAConvertir[`${item}`].tipo, arreglo);
       }
     }
     map.forEach((value, key) => {
       const serv = new Servicio();
-      serv.nombre = key;
-      serv.props = value;
-      this.serviciosConvertidos.push(serv);
+      serv['nombre'] = key;
+      serv['props'] = value;
+      serviciosCon.push(serv);
     });
+    return serviciosCon;
   }
 
   returnTemplateJson(nombreRaiz: string, nombre: string, id: string, tipo: string) {
-    return `${nombreRaiz} = {nombre: '${nombre}',id: '${id}',tipo: '${tipo}',status: true}`;
+    console.log(`"${nombreRaiz}":{"nombre":"${nombre}","tipo":"${tipo}"}`);
+    return JSON.parse(`"${nombreRaiz}":{"nombre":"${nombre}","tipo":"${tipo}"}`);
   }
 
   returnOffer(ofertaToConvert: Ofertas) {
     const objetoRegreso = {};
     const cantidadDeOfertas = ofertaToConvert.ofertas;
+    console.log('la cantidad de ofertas son: ', cantidadDeOfertas);
     const ofertasRegreso = [];
-    for (let i = 0; i < cantidadDeOfertas.length ; i++) {
+    for (let i = 0; i < cantidadDeOfertas.length; i++) {
       const nuevaOferta = {};
       nuevaOferta['nombre'] = cantidadDeOfertas[i].nombre;
       // TODO guardar los servicios nuevos
-      const serviciosNuevos = [];
+      const serviciosNuevos = {};
       const serviciosDeLasOfertas = cantidadDeOfertas[i].servicios;
-      for (let j = 0; j < serviciosDeLasOfertas.length; j++) {
-        const propiedadDeLasOfertas = serviciosDeLasOfertas[j].props;
-        for (let k = 0 ; k < propiedadDeLasOfertas.length ; k++) {
+      console.log('los sevicios de la oferta son: ');
+      console.log(nuevaOferta['nombre']);
+      console.log(serviciosDeLasOfertas);
+      console.log(serviciosDeLasOfertas.length);
+      if (serviciosDeLasOfertas.length === undefined) {
+        console.log('entre al if de == 0');
+        // tslint:disable-next-line: forin
+        for (const item in serviciosDeLasOfertas) {
+          console.log('entre al for de == 0');
+          serviciosNuevos[`${item}`] = serviciosDeLasOfertas[`${item}`];
+        }
+      } else {
+        for (let j = 0; j < serviciosDeLasOfertas.length; j++) {
+          const propiedadDeLasOfertas = serviciosDeLasOfertas[j]['props'];
           console.log(propiedadDeLasOfertas);
-          console.log(propiedadDeLasOfertas[k]);
-          serviciosNuevos.push(this.returnTemplateJson(
-            ('' + propiedadDeLasOfertas[k]['nombre']).split(' ')[0].toLowerCase(),
-            propiedadDeLasOfertas[k]['nombre'],
-            propiedadDeLasOfertas[k]['id'], serviciosDeLasOfertas[j].nombre
-          ));
+          for (let k = 0; k < propiedadDeLasOfertas.length; k++) {
+            console.log(propiedadDeLasOfertas[k]);
+            serviciosNuevos[('' + propiedadDeLasOfertas[k]['nombre']).split(' ')[0].toLowerCase()] = {
+              nombre: propiedadDeLasOfertas[k]['nombre'],
+              tipo: serviciosDeLasOfertas[j]['nombre']
+            };
+          }
         }
       }
       nuevaOferta['servicios'] = serviciosNuevos;
@@ -97,16 +113,16 @@ export class OfertasNombreComponent implements OnInit {
     objetoRegreso['idcliente'] = ofertaToConvert.idcliente;
     objetoRegreso['ofertas'] = ofertasRegreso;
     console.log(objetoRegreso);
-    console.log(JSON.stringify(objetoRegreso));
+    // console.log(JSON.stringify(objetoRegreso));
     return objetoRegreso;
   }
 
   addCheckboxes() {
     if (this.serviciosConvertidos) {
-      console.log(this.serviciosConvertidos);
+      // console.log(this.serviciosConvertidos);
       this.serviciosConvertidos.forEach((o, i) => {
-        console.log(o);
-        console.log(i);
+        // console.log(o);
+        // console.log(i);
         const control = new FormControl(false); // if first item set to true, else false
         (this.form.controls.orders as FormArray).push(control);
       });
@@ -122,15 +138,15 @@ export class OfertasNombreComponent implements OnInit {
     if (this.isEmpty(this.servicioTemp)) {
       this.servicioTemp[0] = new Servicio();
       this.servicioTemp[0] = new Servicio();
-      this.servicioTemp[0].nombre = servicio;
-      this.servicioTemp[0].props = [];
-      this.servicioTemp[0].props.push(propiedad);
+      this.servicioTemp[0]['nombre'] = servicio;
+      this.servicioTemp[0]['props'] = [];
+      this.servicioTemp[0]['props'].push(propiedad);
       console.log(this.servicioTemp[0]);
     } else {
       for (let i = 0; i < this.servicioTemp.length; i++) {
-        if (this.servicioTemp[i].nombre === servicio) {
-          if (this.servicioTemp[i].props.indexOf(propiedad) === -1) {
-            this.servicioTemp[i].props.push(propiedad);
+        if (this.servicioTemp[i]['nombre'] === servicio) {
+          if (this.servicioTemp[i]['props'].indexOf(propiedad) === -1) {
+            this.servicioTemp[i]['props'].push(propiedad);
           }
           inserted = true;
         }
@@ -139,10 +155,10 @@ export class OfertasNombreComponent implements OnInit {
         console.log(this.servicioTemp.length);
         const value = this.servicioTemp.length;
         this.servicioTemp[value] = new Servicio();
-        this.servicioTemp[value].nombre = servicio;
-        this.servicioTemp[value].props = [];
-        if (this.servicioTemp[value].props.indexOf(propiedad) === -1) {
-          this.servicioTemp[value].props.push(propiedad);
+        this.servicioTemp[value]['nombre'] = servicio;
+        this.servicioTemp[value]['props'] = [];
+        if (this.servicioTemp[value]['props'].indexOf(propiedad) === -1) {
+          this.servicioTemp[value]['props'].push(propiedad);
         }
       }
     }
@@ -151,12 +167,12 @@ export class OfertasNombreComponent implements OnInit {
   removeValueToOferta(servicio: string, propiedad: object) {
     console.log('si entre a remove');
     for (let i = 0; i < this.servicioTemp.length; i++) {
-      if (this.servicioTemp[i].nombre === servicio) {
+      if (this.servicioTemp[i]['nombre'] === servicio) {
         console.log('si encontre el servicio');
-        const index = this.servicioTemp[i].props.indexOf(propiedad);
+        const index = this.servicioTemp[i]['props'].indexOf(propiedad);
         console.log(index);
         if (index > -1) {
-          this.servicioTemp[i].props.splice(index, 1);
+          this.servicioTemp[i]['props'].splice(index, 1);
           console.log('si lo di de baja');
         }
       }
@@ -168,15 +184,17 @@ export class OfertasNombreComponent implements OnInit {
     console.log(event.target.name, event.target.value, event.target.checked);
     const valores = event.target.name.split('-');
     if (event.target.checked) {
-      this.addValueToOferta(valores[0], {nombre: valores[1], id: valores[2] });
+      this.addValueToOferta(valores[0], { nombre: valores[1], id: valores[2] });
     } else {
-      this.removeValueToOferta(valores[0],  {nombre: valores[1], id: valores[2] });
+      this.removeValueToOferta(valores[0], { nombre: valores[1], id: valores[2] });
     }
   }
 
   get formData() { return this.form; }
 
   submit() {
+    console.log(this.todasLasOfertasAgregadas);
+    console.log(this.todasLasOfertasAgregadas.ofertas);
     const cuantasOfertas = this.todasLasOfertasAgregadas.ofertas.length;
     console.log(cuantasOfertas);
     for (let i = 0; i < cuantasOfertas; i++) {
@@ -185,8 +203,8 @@ export class OfertasNombreComponent implements OnInit {
         this.agregarOfertaDaon();
         this.todasLasOfertasAgregadas.ofertas[i].servicios = this.servicioTemp;
         this.servicioTemp = [];
-        console.log('todaslasoferAgregadas' +  this.todasLasOfertasAgregadas);
-        this.todasLasOfertasAgregadasReturn.emit( JSON.stringify( this.returnOffer( this.todasLasOfertasAgregadas) ) );
+        console.log('todaslasoferAgregadas' + this.todasLasOfertasAgregadas);
+        this.todasLasOfertasAgregadasReturn.emit(JSON.stringify(this.returnOffer(this.todasLasOfertasAgregadas)));
         this.uncheckAll();
         this.onOptionsSelected('0');
         return;
@@ -197,10 +215,10 @@ export class OfertasNombreComponent implements OnInit {
     this.todasLasOfertasAgregadas.ofertas[cuantasOfertas].nombre = this.nombreOferta.nativeElement.value;
     this.todasLasOfertasAgregadas.ofertas[cuantasOfertas].servicios = this.servicioTemp;
     this.servicioTemp = [];
-    console.log('todaslasoferAgregadas' ,  this.todasLasOfertasAgregadas);
+    console.log('todaslasoferAgregadas', this.todasLasOfertasAgregadas);
     console.log(this.todasLasOfertasAgregadas);
     console.log(JSON.stringify(this.todasLasOfertasAgregadas.ofertas));
-    this.todasLasOfertasAgregadasReturn.emit( JSON.stringify( this.returnOffer(  this.todasLasOfertasAgregadas)) );
+    this.todasLasOfertasAgregadasReturn.emit(JSON.stringify(this.returnOffer(this.todasLasOfertasAgregadas)));
     this.uncheckAll();
     this.onOptionsSelected('0');
   }
@@ -216,7 +234,7 @@ export class OfertasNombreComponent implements OnInit {
     this.nombreOferta.nativeElement.value = '';
     this.checkboxes.forEach((element) => {
       if (!this.bloqueados.includes(element.nativeElement.name)) {
-        console.log(element.nativeElement.name);
+        // console.log(element.nativeElement.name);
         element.nativeElement.checked = false;
       }
     });
@@ -227,18 +245,43 @@ export class OfertasNombreComponent implements OnInit {
     this.uncheckAll();
     const ofertasCliente = this.todasLasOfertasAgregadas.ofertas[value];
     this.nombreOferta.nativeElement.value = ofertasCliente.nombre;
+    console.log('voy a validar');
+    console.log(ofertasCliente.servicios);
+    // tslint:disable-next-line: forin
+    for (const item in ofertasCliente.servicios) {
 
-    for (let j = 0; j < ofertasCliente.servicios.length; j++) {
-      const propiedades = ofertasCliente.servicios[j].props;
-      for (let k = 0; k < propiedades.length; k++) {
-        const nombreChecked = ofertasCliente.servicios[j].nombre + '-' + propiedades[k];
-        this.checkboxes.forEach((element) => {
-          if (element.nativeElement.name === nombreChecked) {
-            element.nativeElement.checked = true;
-          }
-        });
-      }
+      const nombreChecked = ofertasCliente.servicios[`${item}`].tipo + '-' + ofertasCliente.servicios[`${item}`].nombre;
+      this.checkboxes.forEach((element) => {
+        // console.log(element.nativeElement.name);
+        // console.log(nombreChecked);
+        if (element.nativeElement.name === nombreChecked) {
+          element.nativeElement.checked = true;
+        }
+      });
+
     }
+
+    // for (let j = 0; j < ofertasCliente.servicios.length; j++) {
+    //   const propiedades = ofertasCliente.servicios[j].props;
+    //   console.log(ofertasCliente);
+    //   console.log(ofertasCliente.servicios[j]);
+    //   const objetoCliente = ofertasCliente.servicios[j];
+    //   console.log(objetoCliente);
+
+    //   // tslint:disable-next-line: forin
+    //   for (const item in objetoCliente) {
+    //     console.log('si entre al for', item);
+    //     console.log(item);
+    //     const nombreChecked = objetoCliente[`${item}`].tipo + '-' + objetoCliente[`${item}`].nombre;
+    //     this.checkboxes.forEach((element) => {
+    //       console.log(element.nativeElement.name);
+    //       console.log(nombreChecked);
+    //       if (element.nativeElement.name === nombreChecked) {
+    //         element.nativeElement.checked = true;
+    //       }
+    //     });
+    //   }
+    // }
   }
 
 

@@ -18,7 +18,7 @@ export class CreateClienteComponent implements OnInit {
   // para las ofertas
   ofertasExistentes: Ofertas;
   // servciosDeOfertasExistentes: Servicio[];
-  ofertasN: any[];
+  ofertasN: {};
   abrir = false;
 
   // Clases
@@ -126,56 +126,56 @@ export class CreateClienteComponent implements OnInit {
   }
 
   async sendOfer() {
-    this.ofertasN = [];
-    const selfie = {
+    this.ofertasN = {};
+    this.ofertasN['selfie'] = {
       nombre: 'selfie',
       id: '1234567890',
       tipo: 'Biometricos',
       status: true
     };
-    const documento = {
+    this.ofertasN['documento'] = {
       nombre: 'documento',
       id: '1234567890',
       tipo: 'Biometricos',
       status: true
     };
-    const prueba = {
+    this.ofertasN['prueba'] = {
       nombre: 'Prueba de Vida',
       id: '1234567890',
       tipo: 'Biometricos',
       status: true
     };
-    const correo = {
+    this.ofertasN['correo'] = {
       nombre: 'Correo Electrónico',
       id: '1234567890',
       tipo: 'Validacion Recepción',
       status: true
     };
-    const sms = {
+    this.ofertasN['sms'] = {
       nombre: 'SMS',
       id: '1234567890',
       tipo: 'Validacion Recepción',
       status: true
     };
-    const rfc = {
+    this.ofertasN['rfc'] = {
       nombre: 'RFC',
       id: '1234567890',
       tipo: 'Validacion Información',
       status: true
     };
-    const clabe = {
+    this.ofertasN['clabe'] = {
       nombre: 'Cuenta Clabe',
       id: '1234567890',
       tipo: 'Validacion Información',
       status: true
     };
-    this.ofertasN.push(selfie);
-    this.ofertasN.push(documento);
-    this.ofertasN.push(prueba);
-    this.ofertasN.push(correo);
-    this.ofertasN.push(sms);
-    this.ofertasN.push(rfc);
-    this.ofertasN.push(clabe);
+    // this.ofertasN.push(selfie);
+    // this.ofertasN.push(documento);
+    // this.ofertasN.push(prueba);
+    // this.ofertasN.push(correo);
+    // this.ofertasN.push(sms);
+    // this.ofertasN.push(rfc);
+    // this.ofertasN.push(clabe);
 
     // this.ofertasN[0] = new Servicio();
     // this.ofertasN[0].nombre = 'Daon';
@@ -214,6 +214,7 @@ export class CreateClienteComponent implements OnInit {
 
     if (this.myForm.invalid) {
       this.f.correo.updateValueAndValidity();
+      console.log(this.cliente.correo);
       console.log('no es un correo valido');
       // await this.spinner.hide();
       return;

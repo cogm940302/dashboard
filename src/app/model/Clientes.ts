@@ -20,7 +20,7 @@ export class Clientes {
 
   export class Oferta {
     nombre: string;
-   servicios: Servicio[];
+    servicios: Servicio[];
   }
 
   // export class OfertaRefactor {
@@ -29,8 +29,8 @@ export class Clientes {
   // }
 
   export class Servicio {
-    nombre: string;
-    props: any[];
+    // nombre: string;
+    // props: any[];
   }
 
   export class OfertasCliente {
