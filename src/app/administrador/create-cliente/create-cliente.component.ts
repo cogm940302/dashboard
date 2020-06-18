@@ -139,13 +139,13 @@ export class CreateClienteComponent implements OnInit {
       tipo: 'Biometricos',
       status: true
     };
-    this.ofertasN['prueba'] = {
+    this.ofertasN['pruebaDeVida'] = {
       nombre: 'Prueba de Vida',
       id: '1234567890',
       tipo: 'Biometricos',
       status: true
     };
-    this.ofertasN['correo'] = {
+    this.ofertasN['correoElectronico'] = {
       nombre: 'Correo Electrónico',
       id: '1234567890',
       tipo: 'Validacion Recepción',
@@ -163,7 +163,7 @@ export class CreateClienteComponent implements OnInit {
       tipo: 'Validacion Información',
       status: true
     };
-    this.ofertasN['clabe'] = {
+    this.ofertasN['cuentaClabe'] = {
       nombre: 'Cuenta Clabe',
       id: '1234567890',
       tipo: 'Validacion Información',

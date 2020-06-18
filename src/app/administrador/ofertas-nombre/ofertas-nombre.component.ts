@@ -64,9 +64,20 @@ export class OfertasNombreComponent implements OnInit {
     return serviciosCon;
   }
 
-  returnTemplateJson(nombreRaiz: string, nombre: string, id: string, tipo: string) {
-    console.log(`"${nombreRaiz}":{"nombre":"${nombre}","tipo":"${tipo}"}`);
-    return JSON.parse(`"${nombreRaiz}":{"nombre":"${nombre}","tipo":"${tipo}"}`);
+  returnNameOfService(nombre: string) {
+    const moreThanAWord = nombre.split(' ');
+    nombre = nombre.replace(/\s/g, '');
+    if (moreThanAWord && moreThanAWord.length > 1) {
+      nombre =
+        nombre.substring(0, 1).toLowerCase() + nombre.substring(1, nombre.length);
+    }
+    nombre = this.eliminarAcentos(nombre);
+    console.log(nombre);
+    return nombre;
+  }
+
+  eliminarAcentos(texto: string) {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   }
 
   returnOffer(ofertaToConvert: Ofertas) {
@@ -97,7 +108,8 @@ export class OfertasNombreComponent implements OnInit {
           console.log(propiedadDeLasOfertas);
           for (let k = 0; k < propiedadDeLasOfertas.length; k++) {
             console.log(propiedadDeLasOfertas[k]);
-            serviciosNuevos[('' + propiedadDeLasOfertas[k]['nombre']).split(' ')[0].toLowerCase()] = {
+            serviciosNuevos[ this.returnNameOfService(  propiedadDeLasOfertas[k]['nombre']) ] = {
+            // serviciosNuevos[('' + propiedadDeLasOfertas[k]['nombre']).split(' ')[0].toLowerCase()] = {
               nombre: propiedadDeLasOfertas[k]['nombre'],
               tipo: serviciosDeLasOfertas[j]['nombre']
             };

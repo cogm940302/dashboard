@@ -33,6 +33,18 @@ export class CognitoService {
   //   ClientId: '1gagno0fctvkt483tidg6diktp', // Your client id here
   // };
 
+  async isLogguedIn() {
+    return await Auth.currentAuthenticatedUser()
+      .then((success) => {
+        console.log(success);
+        return true;
+      })
+      .catch((err) => {
+        console.log(err);
+        return false;
+      });
+  }
+
   async signOut() {
     try {
       await Auth.signOut();
