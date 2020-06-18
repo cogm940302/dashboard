@@ -29,6 +29,11 @@ export class LoginComponent implements OnInit {
     this.error = '';
     console.log(resultado);
     if (resultado === '') {
+      const jsonInicio = {
+        usuario: this.textUser,
+        horaInicio: new Date()
+      };
+      sessionStorage.setItem('jsonLogin', JSON.stringify(jsonInicio));
       this.router.navigate(['/dashboard/']);
     } else if (resultado === 'NEW') {
       this.titulo = 'Cambia tu contraseña';

@@ -1,3 +1,4 @@
+import { LoginGuard } from './services/guards/login.guard';
 import { AdministradorModule } from './administrador/administrador.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
@@ -42,7 +43,9 @@ import { LoginComponent } from './user/login/login.component';
     AdminLayoutComponent,
     LoginComponent
   ],
-  providers: [AmplifyService],
+  providers: [AmplifyService,
+    LoginGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
