@@ -3,6 +3,14 @@
         <mat-tab-group>
             <mat-tab label="Datos">
                 <div class="errorGenerico">{{errorGenerico}}</div>
+                <div class="row">
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="First name">
+                    </div>
+                    <div class="col">
+                      <input type="text" class="form-control" placeholder="Last name">
+                    </div>
+                  </div>
                 <div class="form-group">
                     <label for="nombreInput" class="col-4">Nombre</label>
                     <input type="text" value="{{cliente.nombre}}" name="nombre" class="form-control col-7" id="nombreInput" formControlName="nombre" placeholder="Nombre"  [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }" ng-disabled="inputNameDisabled">
