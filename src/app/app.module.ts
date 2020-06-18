@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
 import { AmplifyAngularModule, AmplifyService } from 'aws-amplify-angular';
 import { MatFormFieldModule } from '@angular/material';
 import { MatTableModule } from '@angular/material';
-
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app.routing';
 import { NavbarModule } from './shared/navbar/navbar.module';
@@ -36,7 +36,8 @@ import { LoginComponent } from './user/login/login.component';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatTableModule,
-    AdministradorModule
+    AdministradorModule,
+    NgbModule
   ],
   declarations: [
     AppComponent,

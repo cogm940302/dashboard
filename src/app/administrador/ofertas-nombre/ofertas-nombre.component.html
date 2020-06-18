@@ -5,41 +5,42 @@
       <form class="" [formGroup]="form" (ngSubmit)="submit()" ngNativeValidate>
         <div class="row">
           <div class="col">
-            <input type="text" placeholder="Nombre de la oferta" required #nombreOferta>
+            <input type="text" class="form-control" placeholder="Nombre de la oferta" required #nombreOferta>
           </div>
         </div>
         <!-- our form array of checkboxes will go here -->
 
+
         <div class="row mt-3">
-          <label formArrayName="orders" class="row"
+          <div formArrayName="orders" class="col-md-4"
             *ngFor="let order of form.controls.orders['controls']; let i = index">
 
-            <div class="row">
+            <div class="">
               <label class="col" style="font-weight: bold;">{{serviciosConvertidos[i]['nombre']}}
-                  <br>
-                  <br/>
-                  <br>
               </label>
             </div>
 
             <!-- <input type="checkbox" name="{{serviciosConvertidos[i].nombre}}" (change)="toogleCheckbox($event)" [formControlName]="i" />
         {{serviciosConvertidos[i].nombre}} -->
 
-            <div>
+              <div class="form-check" *ngFor="let propiedad of serviciosConvertidos[i]['props']; let j = index ">
+                <input 
+                  #checkboxes type="checkbox" class="form-check-input" (change)="toogleCheckbox($event)"
+                  name="{{serviciosConvertidos[i]['nombre'] + '-' + serviciosConvertidos[i]['props'][j].nombre}}" />
+                
+                <label class="form-check-label" for="defaultCheck1">
+                  {{serviciosConvertidos[i]['props'][j].nombre}}
+                </label>
+              </div>
+
+              <!--
               <label *ngFor="let propiedad of serviciosConvertidos[i]['props']; let j = index ">
                 <input 
                   #checkboxes type="checkbox" (change)="toogleCheckbox($event)"
                   name="{{serviciosConvertidos[i]['nombre'] + '-' + serviciosConvertidos[i]['props'][j].nombre}}" />{{serviciosConvertidos[i]['props'][j].nombre}}
-                  <br>
-                  <br/>
-                  <br>
                 </label>
-            </div>
-           
-          </label>
-          <br>
-          <br/>
-          <br>
+                -->
+              </div>
         </div>
 
         <button class="btn btn-primary">Guardar Oferta</button>

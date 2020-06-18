@@ -11,3 +11,36 @@
 .mat-tab-label{
     color: black !important;
 }
+
+.card{
+    box-shadow: none !important; 
+}
+
+.title-ofertas{
+    padding: 32px !important;
+}
+
+.container-login{
+    width: 30%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.btn-regresar{
+    margin-left: 5%;
+    margin-right: 2%;
+    margin-bottom: 30px;
+}
+
+.btn-guardar{
+    margin-left: 2%;
+    margin-bottom: 30px;
+}
+
+@media (min-width: 1200px){
+.container {
+    width: auto !important;
+}
+}
