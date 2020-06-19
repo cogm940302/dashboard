@@ -21,7 +21,7 @@ export class MiddleOfertaMongoService {
     const creaOf = this.http.post(url, data, { headers: this.headers });
     await creaOf.toPromise().
       then((res) => {
-        // console.log(res);
+        console.log(res);
         if (res['errorType']) {
           response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(res['errorType'])}`;
         }
@@ -29,6 +29,7 @@ export class MiddleOfertaMongoService {
         console.log(err);
         response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(err)}`;
       });
+      console.log(response);
     return response;
   }
 
@@ -40,7 +41,7 @@ export class MiddleOfertaMongoService {
     await this.http.get(urlMongo + `oferta/${id}/`, { headers: this.headers })
       .toPromise().then((res) => {
         // console.log(res);
-        if (res['errorType']) {
+        if (!res || res['errorType']) {
           response = { error: 'Error, favor de volver a intentar' };
         } else {
           response = res;

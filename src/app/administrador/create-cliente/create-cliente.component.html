@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
     <form *ngIf="filtersLoaded | async" [formGroup]="myForm">
         <mat-tab-group>
             <mat-tab label="Datos">
@@ -71,4 +71,106 @@
             </mat-tab>
         </mat-tab-group>
     </form>
+</div> -->
+
+
+<div>
+    <mat-tab-group>
+        <mat-tab label="Datos">
+            <form *ngIf="filtersLoaded | async" [formGroup]="myForm">
+
+                <div class="errorGenerico">{{errorGenerico}}</div>
+
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nombreInput" class="col-4">Nombre</label>
+                            <input type="text" value="{{cliente.nombre}}" name="nombre" class="form-control col-7"
+                                id="nombreInput" formControlName="nombre" placeholder="Nombre"
+                                [ngClass]="{ 'is-invalid': submitted && f.nombre.errors }"
+                                ng-disabled="inputNameDisabled">
+                            <div *ngIf="submitted && f.nombre.errors" class="invalid-feedback">
+                                <div *ngIf="f.nombre.errors.unique">Este nombre del cliente ya se encuentra registrado
+                                    en la base de datos</div>
+                                <div *ngIf="f.nombre.errors.required">Nombre requerido</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="telefonoInput">Telefono</label>
+                            <input placeholder="8888888888 ext 8888" type="tel" value="{{cliente.telefono}}"
+                                name="telefono" class="form-control" id="telefonoInput" formControlName="telefono"
+                                [ngClass]="{ 'is-invalid': submitted && f.telefono.errors }">
+                            <div *ngIf="submitted && f.telefono.errors" class="invalid-feedback">
+                                <div *ngIf="f.telefono.errors.required">Tel requerido</div>
+                                <div *ngIf="f.telefono.errors.pattern">Tel invalido</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="hrefDaonInput">Referencia Daon</label>
+                            <input type="text" value="{{cliente.hrefDaon}}" name="hrefDaon" class="form-control"
+                                id="hrefDaonInput" formControlName="hrefDaon">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="listposInput">Listas Blancas Post</label>
+                            <input type="text" value="{{cliente.listasBlancasPost}}" name="lisPos" class="form-control"
+                                id="listposInput" formControlName="lisPos">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="listIput">Listas Blancas Get</label>
+                            <input type="text" value="{{cliente.listasBlancas}}" name="lis" class="form-control"
+                                id="listIput" formControlName="lis">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="emailInput" class="col-4">Correo Electronico</label>
+                            <input type="email" value="{{cliente.correo}}" name="correo" class="form-control col-7"
+                                id="emailInput" aria-describedby="emailHelp" placeholder="Email"
+                                formControlName="correo" [ngClass]="{ 'is-invalid': submitted && f.correo.errors }">
+                            <div *ngIf="submitted && f.correo.errors" class="invalid-feedback">
+                                <div *ngIf="f.correo.errors.unique">Este correo del cliente ya se encuentra registrado
+                                    en la
+                                    base de datos</div>
+                                <div *ngIf="f.correo.errors.required">Correo requerido</div>
+                                <div *ngIf="f.correo.errors.pattern">Correo invalido</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <button type="submit" (click)="regresar()"
+                    class="btn btn-outline-info mt-3 btn-regresar">Regresar</button>
+                <button type="submit" (click)="guardar()"
+                    class="btn btn-primary mr-4 mt-3 btn-guardar">{{botonValue}}</button>
+            </form>
+        </mat-tab>
+        <mat-tab label="Ofertas" *ngIf="abrir && id !== undefined && id !== '' ">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="title-ofertas">Seleccione las ofertas para el cliente</h5>
+                </div>
+                <app-ofertas-nombre (todasLasOfertasAgregadasReturn)='recibeOferta($event)' [servicios]="ofertasN"
+                    [todasLasOfertasAgregadas]="ofertas" [idCliente]="cliente._id"></app-ofertas-nombre>
+            </div>
+
+
+        </mat-tab>
+    </mat-tab-group>
+
+
 </div>

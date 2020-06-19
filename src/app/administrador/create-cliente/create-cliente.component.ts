@@ -151,12 +151,12 @@ export class CreateClienteComponent implements OnInit {
       tipo: 'Validacion Recepción',
       status: true
     };
-    this.ofertasN['sms'] = {
-      nombre: 'SMS',
-      id: '1234567890',
-      tipo: 'Validacion Recepción',
-      status: true
-    };
+    // this.ofertasN['sms'] = {
+    //   nombre: 'SMS',
+    //   id: '1234567890',
+    //   tipo: 'Validacion Recepción',
+    //   status: true
+    // };
     this.ofertasN['rfc'] = {
       nombre: 'RFC',
       id: '1234567890',
@@ -165,6 +165,12 @@ export class CreateClienteComponent implements OnInit {
     };
     this.ofertasN['cuentaClabe'] = {
       nombre: 'Cuenta Clabe',
+      id: '1234567890',
+      tipo: 'Validacion Información',
+      status: true
+    };
+    this.ofertasN['telefono'] = {
+      nombre: 'Telefono',
       id: '1234567890',
       tipo: 'Validacion Información',
       status: true
@@ -225,10 +231,12 @@ export class CreateClienteComponent implements OnInit {
       if (!resultCognito) {
         this.errorGenerico = 'Error, favor de volver a intentar';
       } else {
-        this.errorGenerico = await this.client.createCustomer(this.cliente, this.ofertas);
+        // this.errorGenerico = await this.client.createCustomer(this.cliente, this.ofertas);
+        this.errorGenerico = await this.client.createCustomer(this.cliente);
       }
     } else {
-      this.errorGenerico = await this.client.updateCustomer(this.cliente, this.id, this.cliente._id, this.ofertas);
+      // this.errorGenerico = await this.client.updateCustomer(this.cliente, this.id, this.cliente._id, this.ofertas);
+      this.errorGenerico = await this.client.updateCustomer(this.cliente, this.id);
     }
     if (this.errorGenerico === 'OK') {
       setTimeout(() => {
@@ -240,7 +248,7 @@ export class CreateClienteComponent implements OnInit {
   }
 
   recibeOferta(event) {
-    console.log(event);
+    // console.log(event);
     this.ofertas = event;
   }
 

@@ -41,9 +41,11 @@ export class MiddleMongoService {
           response = { error: 'Error, favor de volver a intentar' };
         } else {
           response = res;
+          // console.log(res);
           const responseOferta = await this.ofertaService.getOferta(id);
           if (responseOferta['error']) {
-            response = { error: 'Error, favor de volver a intentar' };
+            // response = { error: 'Error, favor de volver a intentar' };
+            response = { response}
           } else {
             response = { response, responseOferta };
           }
@@ -58,10 +60,10 @@ export class MiddleMongoService {
   }
 
  // Update Customer
- async updateCustomer(data, id: string, idOferta: string, dataOferta) {
+ async updateCustomer(data, id: string) {
   const url = urlMongo + `cliente/${id}`;
   let response = 'OK';
-  console.log(JSON.stringify(dataOferta));
+  // console.log(JSON.stringify(dataOferta));
   this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
   await this.http.put(url, data, { headers: this.headers })
     .toPromise().then(async (res) => {
@@ -73,10 +75,11 @@ export class MiddleMongoService {
         } else {
           response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(res['errorType'])}`;
         }
-      } else {
-        response = await this.ofertaService
-          .updateOferta(idOferta, dataOferta);
       }
+      // else {
+      //   response = await this.ofertaService
+      //     .updateOferta(idOferta, dataOferta);
+      // }
 
     }).catch((err) => {
       console.log(err);
@@ -87,7 +90,7 @@ export class MiddleMongoService {
   return response;
 }
 
-async createCustomer(data, dataOferta) {
+async createCustomer(data) {
   delete data._id;
   let response = 'OK';
   this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
@@ -101,10 +104,11 @@ async createCustomer(data, dataOferta) {
         } else {
           response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(res['errorType'])}`;
         }
-      } else {
-        response = await this.ofertaService
-          .createOferta(res['insertedId'], dataOferta);
       }
+      // else {
+      //   response = await this.ofertaService
+      //     .createOferta(res['insertedId'], dataOferta);
+      // }
     }).catch((err) => {
       console.log(err);
       response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(err)}`;

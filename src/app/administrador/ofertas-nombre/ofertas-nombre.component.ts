@@ -1,3 +1,4 @@
+import { MiddleOfertaMongoService } from './../../services/http/middle-oferta-mongo.service';
 import { Component, OnInit, Input, ViewChildren, QueryList, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Servicio, Ofertas, Oferta } from 'app/model/Clientes';
@@ -12,6 +13,7 @@ export class OfertasNombreComponent implements OnInit {
 
 
   @Input() servicios: any[] = [];
+  @Input() idCliente = '';
   serviciosConvertidos: Servicio[];
   bloqueados = ['Daon-Selfie', 'Daon-Documento', 'Daon-Prueva de vida'];
   @ViewChildren('checkboxes') checkboxes: QueryList<ElementRef>;
@@ -19,20 +21,21 @@ export class OfertasNombreComponent implements OnInit {
   @Input() todasLasOfertasAgregadas: Ofertas;
   @Output() todasLasOfertasAgregadasReturn = new EventEmitter<String>();
   unaSolaOfertaConNombre: Oferta;
+  isCreateOfer = false;
   servicioTemp: Servicio[] = [];
   form: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private middleOferta: MiddleOfertaMongoService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       orders: new FormArray([])
     });
-    // console.log(this.servicios);
-    // console.log(this.todasLasOfertasAgregadas);
-    if (!this.todasLasOfertasAgregadas || this.isEmpty(this.todasLasOfertasAgregadas)) {
+    console.log(this.todasLasOfertasAgregadas);
+    if (!this.todasLasOfertasAgregadas || !this.todasLasOfertasAgregadas.ofertas || this.isEmpty(this.todasLasOfertasAgregadas.ofertas)) {
       this.todasLasOfertasAgregadas = new Ofertas();
       this.todasLasOfertasAgregadas.ofertas = [];
+      this.isCreateOfer = true;
     } else {
       // this.onOptionsSelected('0');
     }
@@ -88,7 +91,6 @@ export class OfertasNombreComponent implements OnInit {
     for (let i = 0; i < cantidadDeOfertas.length; i++) {
       const nuevaOferta = {};
       nuevaOferta['nombre'] = cantidadDeOfertas[i].nombre;
-      // TODO guardar los servicios nuevos
       const serviciosNuevos = {};
       const serviciosDeLasOfertas = cantidadDeOfertas[i].servicios;
       console.log('los sevicios de la oferta son: ');
@@ -125,16 +127,12 @@ export class OfertasNombreComponent implements OnInit {
     objetoRegreso['idcliente'] = ofertaToConvert.idcliente;
     objetoRegreso['ofertas'] = ofertasRegreso;
     console.log(objetoRegreso);
-    // console.log(JSON.stringify(objetoRegreso));
     return objetoRegreso;
   }
 
   addCheckboxes() {
     if (this.serviciosConvertidos) {
-      // console.log(this.serviciosConvertidos);
       this.serviciosConvertidos.forEach((o, i) => {
-        // console.log(o);
-        // console.log(i);
         const control = new FormControl(false); // if first item set to true, else false
         (this.form.controls.orders as FormArray).push(control);
       });
@@ -216,7 +214,8 @@ export class OfertasNombreComponent implements OnInit {
         this.todasLasOfertasAgregadas.ofertas[i].servicios = this.servicioTemp;
         this.servicioTemp = [];
         console.log('todaslasoferAgregadas' + this.todasLasOfertasAgregadas);
-        this.todasLasOfertasAgregadasReturn.emit(JSON.stringify(this.returnOffer(this.todasLasOfertasAgregadas)));
+        // this.todasLasOfertasAgregadasReturn.emit(JSON.stringify(this.returnOffer(this.todasLasOfertasAgregadas)));
+        this.createOrUpdateOfer(this.returnOffer(this.todasLasOfertasAgregadas));
         this.uncheckAll();
         this.onOptionsSelected('0');
         return;
@@ -230,7 +229,8 @@ export class OfertasNombreComponent implements OnInit {
     console.log('todaslasoferAgregadas', this.todasLasOfertasAgregadas);
     console.log(this.todasLasOfertasAgregadas);
     console.log(JSON.stringify(this.todasLasOfertasAgregadas.ofertas));
-    this.todasLasOfertasAgregadasReturn.emit(JSON.stringify(this.returnOffer(this.todasLasOfertasAgregadas)));
+    // this.todasLasOfertasAgregadasReturn.emit(JSON.stringify(this.returnOffer(this.todasLasOfertasAgregadas)));
+    this.createOrUpdateOfer(this.returnOffer(this.todasLasOfertasAgregadas));
     this.uncheckAll();
     this.onOptionsSelected('0');
   }
@@ -242,11 +242,22 @@ export class OfertasNombreComponent implements OnInit {
     // this.addValueToOferta('Daon', 'Prueva de vida');
   }
 
+  createOrUpdateOfer(objectRequest: any) {
+    console.log(this.isCreateOfer);
+    if (this.isCreateOfer === true) {
+      console.log('voy a crear una oferta');
+      this.middleOferta.createOferta(this.idCliente, objectRequest);
+    } else {
+      console.log('voy a guardar una oferta');
+      this.middleOferta.updateOferta(this.idCliente, objectRequest);
+    }
+  }
+
   uncheckAll() {
     this.nombreOferta.nativeElement.value = '';
     this.checkboxes.forEach((element) => {
       if (!this.bloqueados.includes(element.nativeElement.name)) {
-        // console.log(element.nativeElement.name);
+
         element.nativeElement.checked = false;
       }
     });
@@ -264,8 +275,6 @@ export class OfertasNombreComponent implements OnInit {
 
       const nombreChecked = ofertasCliente.servicios[`${item}`].tipo + '-' + ofertasCliente.servicios[`${item}`].nombre;
       this.checkboxes.forEach((element) => {
-        // console.log(element.nativeElement.name);
-        // console.log(nombreChecked);
         if (element.nativeElement.name === nombreChecked) {
           element.nativeElement.checked = true;
         }
@@ -273,27 +282,6 @@ export class OfertasNombreComponent implements OnInit {
 
     }
 
-    // for (let j = 0; j < ofertasCliente.servicios.length; j++) {
-    //   const propiedades = ofertasCliente.servicios[j].props;
-    //   console.log(ofertasCliente);
-    //   console.log(ofertasCliente.servicios[j]);
-    //   const objetoCliente = ofertasCliente.servicios[j];
-    //   console.log(objetoCliente);
-
-    //   // tslint:disable-next-line: forin
-    //   for (const item in objetoCliente) {
-    //     console.log('si entre al for', item);
-    //     console.log(item);
-    //     const nombreChecked = objetoCliente[`${item}`].tipo + '-' + objetoCliente[`${item}`].nombre;
-    //     this.checkboxes.forEach((element) => {
-    //       console.log(element.nativeElement.name);
-    //       console.log(nombreChecked);
-    //       if (element.nativeElement.name === nombreChecked) {
-    //         element.nativeElement.checked = true;
-    //       }
-    //     });
-    //   }
-    // }
   }
 
 
