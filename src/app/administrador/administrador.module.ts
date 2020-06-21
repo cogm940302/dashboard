@@ -9,12 +9,13 @@ import { AdministradorRoutes } from './administrador.routing';
 import { from } from 'rxjs';
 import { OfertasComponent } from './ofertas/ofertas.component';
 import { OfertasNombreComponent } from './ofertas-nombre/ofertas-nombre.component';
+import { SecuredTouchComponent } from './secured-touch/secured-touch.component';
 
 
 
 
 @NgModule({
-  declarations: [CreateClienteComponent, OfertasComponent, OfertasNombreComponent],
+  declarations: [CreateClienteComponent, OfertasComponent, OfertasNombreComponent, SecuredTouchComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(AdministradorRoutes),

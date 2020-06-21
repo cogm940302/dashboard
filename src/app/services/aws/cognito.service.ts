@@ -47,6 +47,7 @@ export class CognitoService {
 
   async signOut() {
     try {
+      sessionStorage.clear();
       await Auth.signOut();
     } catch (error) {
       console.log('error signing out: ', error);

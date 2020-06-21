@@ -140,7 +140,7 @@ export class CreateClienteComponent implements OnInit {
       status: true
     };
     this.ofertasN['pruebaDeVida'] = {
-      nombre: 'Prueba de Vida',
+      nombre: 'Prueba De Vida',
       id: '1234567890',
       tipo: 'Biometricos',
       status: true

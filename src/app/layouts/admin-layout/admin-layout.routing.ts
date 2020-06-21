@@ -1,3 +1,4 @@
+import { SecuredTouchComponent } from './../../administrador/secured-touch/secured-touch.component';
 import { Routes } from '@angular/router';
 
 import { LoginComponent } from './../../user/login/login.component';
@@ -10,6 +11,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'user',           component: UserComponent },
     // { path: 'login',          component: LoginComponent },
     { path: 'edit',           component: CreateClienteComponent},
-    { path: 'edit/:id',       component: CreateClienteComponent}
+    { path: 'edit/:id',       component: CreateClienteComponent},
+    { path: 'st',       component: SecuredTouchComponent}
 
 ];

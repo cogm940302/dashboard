@@ -13,15 +13,15 @@ export class MiddleMongoService {
   headers = new HttpHeaders().set('Content-Type', 'application/json');
 
   constructor(private http: HttpClient, private ofertaService: MiddleOfertaMongoService,
-              public cognitoService: CognitoService, public router: Router) { }
+    public cognitoService: CognitoService, public router: Router) { }
 
   // Get all customer
   async getCustomers() {
     let response = {};
     this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
     await this.http.get(urlMongo + `cliente`, { headers: this.headers })
-    // await this.http.get('https://dev-api.mitidentity.com/' + `cliente`)
-    .toPromise().then(async (res) => {
+      // await this.http.get('https://dev-api.mitidentity.com/' + `cliente`)
+      .toPromise().then(async (res) => {
         response = res;
         // console.log(res);
       }).catch((err) => {
@@ -45,7 +45,7 @@ export class MiddleMongoService {
           const responseOferta = await this.ofertaService.getOferta(id);
           if (responseOferta['error']) {
             // response = { error: 'Error, favor de volver a intentar' };
-            response = { response}
+            response = { response }
           } else {
             response = { response, responseOferta };
           }
@@ -59,67 +59,105 @@ export class MiddleMongoService {
     return response;
   }
 
- // Update Customer
- async updateCustomer(data, id: string) {
-  const url = urlMongo + `cliente/${id}`;
-  let response = 'OK';
-  // console.log(JSON.stringify(dataOferta));
-  this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
-  await this.http.put(url, data, { headers: this.headers })
-    .toPromise().then(async (res) => {
+  // Update Customer
+  async updateCustomer(data, id: string) {
+    const url = urlMongo + `cliente/${id}`;
+    let response = 'OK';
+    // console.log(JSON.stringify(dataOferta));
+    this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
+    await this.http.put(url, data, { headers: this.headers })
+      .toPromise().then(async (res) => {
 
-      console.log(res);
-      if (res['errorType']) {
-        if (JSON.stringify(res['errorMessage']).includes('duplicate')) {
-          response = `Error: El ${res['errorMessage']['key']} ya esta registrado`;
+        console.log(res);
+        if (res['errorType']) {
+          if (JSON.stringify(res['errorMessage']).includes('duplicate')) {
+            response = `Error: El ${res['errorMessage']['key']} ya esta registrado`;
+          } else {
+            response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(res['errorType'])}`;
+          }
+        }
+        // else {
+        //   response = await this.ofertaService
+        //     .updateOferta(idOferta, dataOferta);
+        // }
+
+      }).catch((err) => {
+        console.log(err);
+        response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(err)}`;
+        this.validaError(err);
+      });
+
+    return response;
+  }
+
+  async createCustomer(data) {
+    delete data._id;
+    let response = 'OK';
+    this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
+
+    await this.http.post(urlMongo + `cliente`, data, { headers: this.headers })
+      .toPromise().then(async (res) => {
+        // console.log(res);
+        if (res['errorType']) {
+          if (JSON.stringify(res['errorMessage']).includes('duplicate')) {
+            response = `Error: El ${res['errorMessage']['key']} ya esta registrado`;
+          } else {
+            response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(res['errorType'])}`;
+          }
+        }
+        // else {
+        //   response = await this.ofertaService
+        //     .createOferta(res['insertedId'], dataOferta);
+        // }
+      }).catch((err) => {
+        console.log(err);
+        response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(err)}`;
+        this.validaError(err);
+      });
+
+
+    return response;
+  }
+
+  async getSTValues() {
+    let response = {};
+    const token = sessionStorage.getItem('jwtToken');
+    this.headers = this.headers.set('Authorization', token);
+    await this.http.get(urlMongo + `catalogo`, { headers: this.headers })
+      .toPromise().then(async (res) => {
+        console.log(res);
+        if (res['errorType']) {
+          response = { error: 'Error, favor de volver a intentar' };
         } else {
+          response = res;
+        }
+      }).catch((err) => {
+        response = { error: 'Error, favor de volver a intentar' };
+        this.validaError(err);
+      });
+    return response;
+  }
+
+  async updateSTValues(data: any) {
+    const url = urlMongo + `catalogo`;
+    let response = 'OK';
+    this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
+    await this.http.put(url, data, { headers: this.headers })
+      .toPromise().then(async (res) => {
+        console.log(res);
+        if (res['errorType']) {
           response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(res['errorType'])}`;
         }
-      }
-      // else {
-      //   response = await this.ofertaService
-      //     .updateOferta(idOferta, dataOferta);
-      // }
+      }).catch((err) => {
+        console.log(err);
+        response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(err)}`;
+        this.validaError(err);
+      });
+    return response;
+  }
 
-    }).catch((err) => {
-      console.log(err);
-      response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(err)}`;
-      this.validaError(err);
-    });
-
-  return response;
-}
-
-async createCustomer(data) {
-  delete data._id;
-  let response = 'OK';
-  this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
-
-  await this.http.post(urlMongo + `cliente`, data, { headers: this.headers })
-    .toPromise().then(async (res) => {
-      // console.log(res);
-      if (res['errorType']) {
-        if (JSON.stringify(res['errorMessage']).includes('duplicate')) {
-          response = `Error: El ${res['errorMessage']['key']} ya esta registrado`;
-        } else {
-          response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(res['errorType'])}`;
-        }
-      }
-      // else {
-      //   response = await this.ofertaService
-      //     .createOferta(res['insertedId'], dataOferta);
-      // }
-    }).catch((err) => {
-      console.log(err);
-      response = `Ocurrio un error, favor de reintentar. ${JSON.stringify(err)}`;
-      this.validaError(err);
-    });
-
-
-  return response;
-}
   validaError(err: string) {
-    if ( err['error'] && err['error']['message'] && err['error']['message'].includes('expired')) {
+    if (err['error'] && err['error']['message'] && err['error']['message'].includes('expired')) {
       this.cognitoService.signOut();
       this.router.navigate(['/login']);
     }

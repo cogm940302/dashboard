@@ -1,0 +1,45 @@
+<!-- <div class="card border-0 card-body align-items-center d-flex justify-content-center" style="width: 80rem;">
+    <div class="row"> -->
+
+
+
+<div class="ml-5 card text-center" *ngIf="filtersLoaded | async" style="width: 40rem;">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Habilita o Deshabilita tus servicios</h5>
+            <div class="row">
+                <input #checkboxes type="checkbox" [checked]="isActiveValue" class="form-check-input" (change)="toogleCheckbox($event)"
+                    name="activeInactive" />
+            </div>
+
+            <div class="row">
+                <div class="input-group">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" (click)="cambiaValor(-50)">
+                            <i class="mdi mdi-minus"></i>
+                        </button>
+                    </span>
+                    {{progreso}}
+                    <input type="number" class="form-control" name="progreso" [(ngModel)]="progreso" (ngModelChange)="onChangeValue($event)" max="1000" min="1">
+                    <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button" (click)="cambiaValor(50)">
+                                <i class="mdi mdi-plus"></i>
+                            </button>
+                        </span>
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+                <button (click)="guardar()">Actualizar</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- </div>
+</div> -->

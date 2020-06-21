@@ -73,6 +73,8 @@ export class OfertasNombreComponent implements OnInit {
     if (moreThanAWord && moreThanAWord.length > 1) {
       nombre =
         nombre.substring(0, 1).toLowerCase() + nombre.substring(1, nombre.length);
+    } else {
+      nombre = nombre.toLowerCase();
     }
     nombre = this.eliminarAcentos(nombre);
     console.log(nombre);
