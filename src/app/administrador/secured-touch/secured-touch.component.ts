@@ -1,6 +1,11 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+// import * as Swal from 'sweetalert2'
+
+
 import { MiddleMongoService } from 'app/services/http/middle-mongo.service';
+
+const Swal = require('sweetalert2');
 
 @Component({
   selector: 'app-secured-touch',
@@ -20,11 +25,15 @@ export class SecuredTouchComponent implements OnInit {
     this.filtersLoaded = Promise.resolve(true);
   }
 
+  activaswal() {
+    Swal.fire('Any fool can use a computer');
+
+  }
   async getDBValues () {
     const objectReturn = await this.middle.getSTValues();
     if (objectReturn['error']) {
       console.log(objectReturn);
-      // this.router.navigate(['/dashboard']);
+      this.router.navigate(['/dashboard']);
     } else {
       this.isActiveValue = objectReturn['status'];
       this.progreso = objectReturn['valor'];
@@ -43,9 +52,19 @@ export class SecuredTouchComponent implements OnInit {
       active: this.isActiveValue
     });
     if (objectResponse === 'OK') {
-      // this.router.navigate(['/dashboard']);
+      Swal.fire({
+        icon: 'success',
+        title: 'Valores Actualizados',
+        // text: 'Something went wrong!',
+      });
+      this.router.navigate(['/dashboard']);
     } else {
       console.log(objectResponse);
+      Swal.fire({
+        icon: 'error',
+        title: 'Ocurrio un error',
+        text: JSON.stringify(objectResponse),
+      })
     }
 
   }
