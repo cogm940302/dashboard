@@ -103,7 +103,7 @@ export class CreateClienteComponent implements OnInit {
       Object.assign(this.cliente, objectResponse['response']);
       Object.assign(this.ofertas, objectResponse['responseOferta']);
       this.oferta = this.ofertas.ofertas[(this.ofertas.ofertas.length - 1)];
-      console.log(this.cliente);
+      // console.log(this.cliente);
 
       this.myForm.patchValue({
         correo: this.cliente.correo,
@@ -205,8 +205,8 @@ export class CreateClienteComponent implements OnInit {
 
     if (this.myForm.invalid) {
       this.f.correo.updateValueAndValidity();
-      console.log(this.cliente.correo);
-      console.log('no es un correo valido');
+      // console.log(this.cliente.correo);
+      // console.log('no es un correo valido');
       Swal.fire({
         icon: 'error',
         title: 'Ocurrio un error',
@@ -215,7 +215,7 @@ export class CreateClienteComponent implements OnInit {
       // await this.spinner.hide();
       return;
     }
-    console.log(this.cliente._id);
+    // console.log(this.cliente._id);
     let mensajeSwal = 'Cliente creado';
     if (this.cliente._id === undefined) {
       const resultCognito = await this.getUserAndPass();
