@@ -18,7 +18,9 @@ export class MiddleMongoService {
   // Get all customer
   async getCustomers() {
     let response = {};
+    console.log(sessionStorage.getItem('jwtToken'));
     this.headers = this.headers.set('Authorization', sessionStorage.getItem('jwtToken'));
+    console.log(urlMongo);
     await this.http.get(urlMongo + `cliente`, { headers: this.headers })
       // await this.http.get('https://dev-api.mitidentity.com/' + `cliente`)
       .toPromise().then(async (res) => {

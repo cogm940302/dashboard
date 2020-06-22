@@ -14,7 +14,7 @@ export const environment = {
   identityPoolId: 'us-east-1:5b4956a8-7ba9-40ce-8395-ef20729c964f',
   userPoolId: 'us-east-1_KChp3JRPO',
   clientId: '586c04fjufjqpigcs9p10onog8',
-
+  mandatorySignIn: 'true',
   logins: `cognito-idp.us-east-1.amazonaws.com/us-east-1_KChp3JRPO`,
 
 

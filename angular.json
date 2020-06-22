@@ -53,7 +53,13 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
-            }
+            },
+            "qa": {
+              "fileReplacements": [{
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.qa.ts"
+              }]
+          }
           }
         },
         "serve": {
@@ -64,6 +70,9 @@
           "configurations": {
             "production": {
               "browserTarget": "lbd-free-angular-cli:build:production"
+            },
+            "qa": {
+                "browserTarget": "lbd-free-angular-cli:build:qa"
             }
           }
         },

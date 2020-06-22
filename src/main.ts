@@ -21,7 +21,20 @@ import { environment } from './environments/environment';
 
 import Amplify from 'aws-amplify';
 import awsconfig from './aws-exports';
-Amplify.configure(awsconfig);
+// Amplify.configure(awsconfig);
+
+
+Amplify.configure({
+  Auth: {
+      identityPoolId: environment.identityPoolId,
+      region: environment.region,
+      identityPoolRegion: environment.region,
+      userPoolId: environment.userPoolId,
+      userPoolWebClientId: environment.clientId,
+      mandatorySignIn: environment.mandatorySignIn,
+  }
+});
+
 
 if (environment.production) {
   enableProdMode();
