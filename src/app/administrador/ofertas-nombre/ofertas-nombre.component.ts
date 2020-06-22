@@ -2,7 +2,9 @@ import { MiddleOfertaMongoService } from './../../services/http/middle-oferta-mo
 import { Component, OnInit, Input, ViewChildren, QueryList, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Servicio, Ofertas, Oferta } from 'app/model/Clientes';
+import { Router } from '@angular/router';
 
+const Swal = require('sweetalert2');
 
 @Component({
   selector: 'app-ofertas-nombre',
@@ -25,13 +27,14 @@ export class OfertasNombreComponent implements OnInit {
   servicioTemp: Servicio[] = [];
   form: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private middleOferta: MiddleOfertaMongoService) { }
+  constructor(private formBuilder: FormBuilder, private middleOferta: MiddleOfertaMongoService,
+              public router: Router) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
       orders: new FormArray([])
     });
-    console.log(this.todasLasOfertasAgregadas);
+    // console.log(this.todasLasOfertasAgregadas);
     if (!this.todasLasOfertasAgregadas || !this.todasLasOfertasAgregadas.ofertas || this.isEmpty(this.todasLasOfertasAgregadas.ofertas)) {
       this.todasLasOfertasAgregadas = new Ofertas();
       this.todasLasOfertasAgregadas.ofertas = [];
@@ -77,7 +80,7 @@ export class OfertasNombreComponent implements OnInit {
       nombre = nombre.toLowerCase();
     }
     nombre = this.eliminarAcentos(nombre);
-    console.log(nombre);
+    // console.log(nombre);
     return nombre;
   }
 
@@ -88,30 +91,30 @@ export class OfertasNombreComponent implements OnInit {
   returnOffer(ofertaToConvert: Ofertas) {
     const objetoRegreso = {};
     const cantidadDeOfertas = ofertaToConvert.ofertas;
-    console.log('la cantidad de ofertas son: ', cantidadDeOfertas);
+    // console.log('la cantidad de ofertas son: ', cantidadDeOfertas);
     const ofertasRegreso = [];
     for (let i = 0; i < cantidadDeOfertas.length; i++) {
       const nuevaOferta = {};
       nuevaOferta['nombre'] = cantidadDeOfertas[i].nombre;
       const serviciosNuevos = {};
       const serviciosDeLasOfertas = cantidadDeOfertas[i].servicios;
-      console.log('los sevicios de la oferta son: ');
-      console.log(nuevaOferta['nombre']);
-      console.log(serviciosDeLasOfertas);
-      console.log(serviciosDeLasOfertas.length);
+      // console.log('los sevicios de la oferta son: ');
+      // console.log(nuevaOferta['nombre']);
+      // console.log(serviciosDeLasOfertas);
+      // console.log(serviciosDeLasOfertas.length);
       if (serviciosDeLasOfertas.length === undefined) {
-        console.log('entre al if de == 0');
+        // console.log('entre al if de == 0');
         // tslint:disable-next-line: forin
         for (const item in serviciosDeLasOfertas) {
-          console.log('entre al for de == 0');
+          // console.log('entre al for de == 0');
           serviciosNuevos[`${item}`] = serviciosDeLasOfertas[`${item}`];
         }
       } else {
         for (let j = 0; j < serviciosDeLasOfertas.length; j++) {
           const propiedadDeLasOfertas = serviciosDeLasOfertas[j]['props'];
-          console.log(propiedadDeLasOfertas);
+          // console.log(propiedadDeLasOfertas);
           for (let k = 0; k < propiedadDeLasOfertas.length; k++) {
-            console.log(propiedadDeLasOfertas[k]);
+            // console.log(propiedadDeLasOfertas[k]);
             serviciosNuevos[ this.returnNameOfService(  propiedadDeLasOfertas[k]['nombre']) ] = {
             // serviciosNuevos[('' + propiedadDeLasOfertas[k]['nombre']).split(' ')[0].toLowerCase()] = {
               nombre: propiedadDeLasOfertas[k]['nombre'],
@@ -147,6 +150,8 @@ export class OfertasNombreComponent implements OnInit {
 
   addValueToOferta(servicio: string, propiedad: object) {
     let inserted = false;
+    console.log(this.servicioTemp);
+    console.log( JSON.stringify(  this.servicioTemp ) );
     if (this.isEmpty(this.servicioTemp)) {
       this.servicioTemp[0] = new Servicio();
       this.servicioTemp[0] = new Servicio();
@@ -164,7 +169,7 @@ export class OfertasNombreComponent implements OnInit {
         }
       }
       if (!inserted) {
-        console.log(this.servicioTemp.length);
+        // console.log(this.servicioTemp.length);
         const value = this.servicioTemp.length;
         this.servicioTemp[value] = new Servicio();
         this.servicioTemp[value]['nombre'] = servicio;
@@ -177,23 +182,24 @@ export class OfertasNombreComponent implements OnInit {
   }
 
   removeValueToOferta(servicio: string, propiedad: object) {
-    console.log('si entre a remove');
+    console.log('voy a remover: ');
+    console.log(servicio);
+    console.log(propiedad['nombre']);
     for (let i = 0; i < this.servicioTemp.length; i++) {
       if (this.servicioTemp[i]['nombre'] === servicio) {
-        console.log('si encontre el servicio');
-        const index = this.servicioTemp[i]['props'].indexOf(propiedad);
-        console.log(index);
+        console.log(this.servicioTemp[i]['props']);
+        // const index = this.servicioTemp[i]['props'].indexOf(propiedad);
+        const index = this.servicioTemp[i]['props'].findIndex(record => record.nombre === propiedad['nombre'] );
+
+        console.log('ya lo encontre: ' , index);
         if (index > -1) {
           this.servicioTemp[i]['props'].splice(index, 1);
-          console.log('si lo di de baja');
         }
       }
     }
   }
 
   toogleCheckbox(event: any) {
-    // console.log(event);
-    console.log(event.target.name, event.target.value, event.target.checked);
     const valores = event.target.name.split('-');
     if (event.target.checked) {
       this.addValueToOferta(valores[0], { nombre: valores[1], id: valores[2] });
@@ -205,21 +211,19 @@ export class OfertasNombreComponent implements OnInit {
   get formData() { return this.form; }
 
   submit() {
-    console.log(this.todasLasOfertasAgregadas);
-    console.log(this.todasLasOfertasAgregadas.ofertas);
     const cuantasOfertas = this.todasLasOfertasAgregadas.ofertas.length;
-    console.log(cuantasOfertas);
     for (let i = 0; i < cuantasOfertas; i++) {
       if (this.todasLasOfertasAgregadas.ofertas[i].nombre === this.nombreOferta.nativeElement.value) {
         console.log('ese nombre de oferta ya existe');
-        this.agregarOfertaDaon();
+        // this.agregarOfertaDaon();
+        console.log('Los servicios temp son: ' , this.servicioTemp);
         this.todasLasOfertasAgregadas.ofertas[i].servicios = this.servicioTemp;
         this.servicioTemp = [];
-        console.log('todaslasoferAgregadas' + this.todasLasOfertasAgregadas);
+        // console.log('todaslasoferAgregadas' + this.todasLasOfertasAgregadas);
         // this.todasLasOfertasAgregadasReturn.emit(JSON.stringify(this.returnOffer(this.todasLasOfertasAgregadas)));
         this.createOrUpdateOfer(this.returnOffer(this.todasLasOfertasAgregadas));
         this.uncheckAll();
-        this.onOptionsSelected('0');
+        // this.onOptionsSelected('0');
         return;
       }
     }
@@ -228,13 +232,13 @@ export class OfertasNombreComponent implements OnInit {
     this.todasLasOfertasAgregadas.ofertas[cuantasOfertas].nombre = this.nombreOferta.nativeElement.value;
     this.todasLasOfertasAgregadas.ofertas[cuantasOfertas].servicios = this.servicioTemp;
     this.servicioTemp = [];
-    console.log('todaslasoferAgregadas', this.todasLasOfertasAgregadas);
-    console.log(this.todasLasOfertasAgregadas);
-    console.log(JSON.stringify(this.todasLasOfertasAgregadas.ofertas));
+    // console.log('todaslasoferAgregadas', this.todasLasOfertasAgregadas);
+    // console.log(this.todasLasOfertasAgregadas);
+    // console.log(JSON.stringify(this.todasLasOfertasAgregadas.ofertas));
     // this.todasLasOfertasAgregadasReturn.emit(JSON.stringify(this.returnOffer(this.todasLasOfertasAgregadas)));
     this.createOrUpdateOfer(this.returnOffer(this.todasLasOfertasAgregadas));
     this.uncheckAll();
-    this.onOptionsSelected('0');
+    // this.onOptionsSelected('0');
   }
 
   // TODO: metodo que se debera quitar cuando pase la fase de doan
@@ -245,14 +249,20 @@ export class OfertasNombreComponent implements OnInit {
   }
 
   createOrUpdateOfer(objectRequest: any) {
-    console.log(this.isCreateOfer);
+    // console.log(this.isCreateOfer);
+    let mensajeSwal = 'Oferta Creada';
     if (this.isCreateOfer === true) {
-      console.log('voy a crear una oferta');
+      // console.log('voy a crear una oferta');
       this.middleOferta.createOferta(this.idCliente, objectRequest);
     } else {
-      console.log('voy a guardar una oferta');
+      // console.log('voy a guardar una oferta');
+      mensajeSwal = 'Oferta Actualizada';
       this.middleOferta.updateOferta(this.idCliente, objectRequest);
     }
+    Swal.fire({
+      icon: 'success',
+      title: mensajeSwal,
+    });
   }
 
   uncheckAll() {
@@ -265,13 +275,26 @@ export class OfertasNombreComponent implements OnInit {
     });
   }
 
+  // fillServTemp(oferta: Oferta) {
+  //   this.servicioTemp
+  //   for (const item in oferta.servicios) {
+  //     if (this.servicioTemp === undefined) {
+  //       this.servicioTemp = [];
+  //     }
+
+  //   }
+  // }
+
   onOptionsSelected(value: string) {
     // selecciona la oferta del 'Select'
     this.uncheckAll();
     const ofertasCliente = this.todasLasOfertasAgregadas.ofertas[value];
     this.nombreOferta.nativeElement.value = ofertasCliente.nombre;
-    console.log('voy a validar');
-    console.log(ofertasCliente.servicios);
+    console.log(this.todasLasOfertasAgregadas.ofertas[value]);
+    this.servicioTemp = this.convertOffer( this.todasLasOfertasAgregadas.ofertas[value].servicios);
+    console.log(this.servicioTemp);
+    // console.log('voy a validar');
+    // console.log(ofertasCliente.servicios);
     // tslint:disable-next-line: forin
     for (const item in ofertasCliente.servicios) {
 

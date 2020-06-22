@@ -64,7 +64,7 @@ export class SecuredTouchComponent implements OnInit {
         icon: 'error',
         title: 'Ocurrio un error',
         text: JSON.stringify(objectResponse),
-      })
+      });
     }
 
   }

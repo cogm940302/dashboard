@@ -7,6 +7,7 @@ import { MiddleMongoService } from './../../services/http/middle-mongo.service';
 import { Ofertas, Clientes, Oferta } from 'app/model/Clientes';
 import { OfertaService } from 'app/services/http/oferta.service';
 
+const Swal = require('sweetalert2');
 
 @Component({
   selector: 'app-create-cliente',
@@ -175,21 +176,6 @@ export class CreateClienteComponent implements OnInit {
       tipo: 'Validacion Información',
       status: true
     };
-    // this.ofertasN.push(selfie);
-    // this.ofertasN.push(documento);
-    // this.ofertasN.push(prueba);
-    // this.ofertasN.push(correo);
-    // this.ofertasN.push(sms);
-    // this.ofertasN.push(rfc);
-    // this.ofertasN.push(clabe);
-
-    // this.ofertasN[0] = new Servicio();
-    // this.ofertasN[0].nombre = 'Daon';
-    // this.ofertasN[0].props = ['Selfie', 'Documento', 'Prueva de vida'];
-    // this.ofertasN[1] = new Servicio();
-    // this.ofertasN[1].nombre = 'Validación Recepción';
-    // this.ofertasN[1].props = ['Correo Electrónico', 'SMS'];
-
     this.abrir = true;
   }
 
@@ -204,7 +190,6 @@ export class CreateClienteComponent implements OnInit {
   }
 
   async guardar() {
-    // await this.spinner.show();
     this.errorGenerico = '';
 
     this.isDup = false;
@@ -222,10 +207,16 @@ export class CreateClienteComponent implements OnInit {
       this.f.correo.updateValueAndValidity();
       console.log(this.cliente.correo);
       console.log('no es un correo valido');
+      Swal.fire({
+        icon: 'error',
+        title: 'Ocurrio un error',
+        text: 'no es un correo valido',
+      });
       // await this.spinner.hide();
       return;
     }
     console.log(this.cliente._id);
+    let mensajeSwal = 'Cliente creado';
     if (this.cliente._id === undefined) {
       const resultCognito = await this.getUserAndPass();
       if (!resultCognito) {
@@ -237,8 +228,14 @@ export class CreateClienteComponent implements OnInit {
     } else {
       // this.errorGenerico = await this.client.updateCustomer(this.cliente, this.id, this.cliente._id, this.ofertas);
       this.errorGenerico = await this.client.updateCustomer(this.cliente, this.id);
+      mensajeSwal = 'Cliente Actualizado';
     }
     if (this.errorGenerico === 'OK') {
+      Swal.fire({
+        icon: 'success',
+        title: mensajeSwal,
+        // text: 'Something went wrong!',
+      });
       setTimeout(() => {
         this.router.navigate(['/dashboard']);
       }, 1500);
